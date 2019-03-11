@@ -83,7 +83,8 @@ fabric.properties
 ### Java ###
 # Compiled class file
 *.class
-
+contexts
+events
 # Log file
 *.log
 
