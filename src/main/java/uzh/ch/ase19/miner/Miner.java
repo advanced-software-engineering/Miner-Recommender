@@ -1,6 +1,9 @@
 package uzh.ch.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import uzh.ch.ase19.core.IoHelper;
 import uzh.ch.ase19.core.MethodInvocationContext;
 
@@ -10,16 +13,21 @@ import java.util.Set;
 
 public class Miner {
 
+    private static Logger logger = LogManager.getLogger(Miner.class);
+
     /*
         download the context data and set contextDirectory argument
      */
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("Not enough arguments provided! Syntax: contextDirectory modelDirectory");
+            logger.error("Not enough arguments provided! Syntax: contextDirectory modelDirectory");
         }
 
         String contextDirectory = args[0];
         String modelDirectory = args[1];
+
+        logger.info("Context directory is: " + contextDirectory);
+        logger.info("Model directory is: " + modelDirectory);
 
         readContextsFromDisk(contextDirectory);
     }
