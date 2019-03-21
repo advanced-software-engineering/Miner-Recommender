@@ -3,6 +3,7 @@ package ch.uzh.ifi.seal.ase19.miner;
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
 import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
+import cc.kave.commons.model.ssts.expressions.assignable.ILambdaExpression;
 import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.statements.IAssignment;
 import cc.kave.commons.model.ssts.statements.IReturnStatement;
@@ -65,6 +66,11 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
     @Override
     public Void visit(IReturnStatement stmt, MethodInvocationContext context) {
         return super.visit(stmt, context.setSurroundingType(SurroundingType.RETURN_STATEMENT));
+    }
+
+    @Override
+    public Void visit(ILambdaExpression expr, MethodInvocationContext context) {
+        return super.visit(expr, context.setSurroundingType(SurroundingType.LAMBDA));
     }
 
     List<MethodInvocationContext> getFound() {

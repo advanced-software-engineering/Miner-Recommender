@@ -5,5 +5,6 @@ public enum SurroundingType {
     BRANCHING_CONDITION,
     LOOP,
     ASSIGNMENT,
-    RETURN_STATEMENT
+    RETURN_STATEMENT,
+    LAMBDA
 }
