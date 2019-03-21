@@ -21,6 +21,7 @@ public class Miner {
     public static void main(String[] args) {
         if (args.length < 2) {
             logger.error("Not enough arguments provided! Syntax: contextDirectory modelDirectory");
+            System.exit(1);
         }
 
         String contextDirectory = args[0];
