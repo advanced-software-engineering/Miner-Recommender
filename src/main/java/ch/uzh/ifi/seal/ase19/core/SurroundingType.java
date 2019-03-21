@@ -1,4 +1,4 @@
-package uzh.ch.ase19.core;
+package ch.uzh.ifi.seal.ase19.core;
 
 public enum SurroundingType {
     METHOD_BODY,

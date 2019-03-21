@@ -1,11 +1,11 @@
-package uzh.ch.ase19.miner;
+package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
 
+import ch.uzh.ifi.seal.ase19.core.IoHelper;
+import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uzh.ch.ase19.core.IoHelper;
-import uzh.ch.ase19.core.MethodInvocationContext;
 
 import java.util.ArrayList;
 import java.util.List;

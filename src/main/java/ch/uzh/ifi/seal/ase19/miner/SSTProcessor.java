@@ -1,7 +1,7 @@
-package uzh.ch.ase19.miner;
+package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.ssts.ISST;
-import uzh.ch.ase19.core.MethodInvocationContext;
+import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
 
 import java.util.ArrayList;
 import java.util.List;

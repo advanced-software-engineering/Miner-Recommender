@@ -1,4 +1,4 @@
-package uzh.ch.ase19.miner;
+package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
@@ -6,8 +6,8 @@ import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.statements.IAssignment;
 import cc.kave.commons.model.ssts.statements.IReturnStatement;
-import uzh.ch.ase19.core.MethodInvocationContext;
-import uzh.ch.ase19.core.SurroundingType;
+import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
+import ch.uzh.ifi.seal.ase19.core.SurroundingType;
 
 import java.util.ArrayList;
 import java.util.List;

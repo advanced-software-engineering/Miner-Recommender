@@ -1,4 +1,4 @@
-package uzh.ch.ase19.core;
+package ch.uzh.ifi.seal.ase19.core;
 
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.utils.io.Directory;

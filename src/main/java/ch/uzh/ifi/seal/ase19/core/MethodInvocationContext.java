@@ -1,4 +1,4 @@
-package uzh.ch.ase19.core;
+package ch.uzh.ifi.seal.ase19.core;
 
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
 import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
