@@ -8,7 +8,7 @@ import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.statements.IAssignment;
 import cc.kave.commons.model.ssts.statements.IReturnStatement;
 import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
-import ch.uzh.ifi.seal.ase19.core.SurroundingType;
+import ch.uzh.ifi.seal.ase19.core.models.SurroundingType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +71,11 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
     @Override
     public Void visit(ILambdaExpression expr, MethodInvocationContext context) {
         return super.visit(expr, context.setSurroundingType(SurroundingType.LAMBDA));
+    }
+
+    @Override
+    public Void visit(ITryBlock block, MethodInvocationContext context) {
+        return super.visit(block, context.setSurroundingType(SurroundingType.TRY));
     }
 
     List<MethodInvocationContext> getFound() {

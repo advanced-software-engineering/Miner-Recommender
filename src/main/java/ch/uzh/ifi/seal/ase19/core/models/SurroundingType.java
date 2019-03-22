@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.ase19.core;
+package ch.uzh.ifi.seal.ase19.core.models;
 
 public enum SurroundingType {
     METHOD_BODY,
@@ -6,5 +6,6 @@ public enum SurroundingType {
     LOOP,
     ASSIGNMENT,
     RETURN_STATEMENT,
-    LAMBDA
+    LAMBDA,
+    TRY
 }

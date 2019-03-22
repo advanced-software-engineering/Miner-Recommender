@@ -1,13 +1,16 @@
 package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
-
+import cc.kave.commons.model.naming.codeelements.IFieldName;
+import cc.kave.commons.model.naming.codeelements.IMethodName;
+import cc.kave.commons.model.typeshapes.IMemberHierarchy;
+import cc.kave.commons.utils.ssts.SSTPrintingUtils;
 import ch.uzh.ifi.seal.ase19.core.IoHelper;
 import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
+import ch.uzh.ifi.seal.ase19.core.models.QuerySelection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -39,11 +42,15 @@ public class Miner {
         Set<String> contextList = IoHelper.findAllZips(contextDirectory);
 
         for (String zip : contextList) {
+            logger.info("Process zip: " + zip);
+
             List<Context> contexts = IoHelper.read(contextDirectory.concat(zip));
-            List<MethodInvocationContext> all = new ArrayList<>();
 
             for (Context context : contexts) {
-                all.addAll(processor.process(context.getSST()));
+                List<MethodInvocationContext> methodInvocations = processor.process(context.getSST());
+                Set<IMemberHierarchy<IMethodName>> methodHierarchies = context.getTypeShape().getMethodHierarchies();
+                Set<IFieldName> fields = context.getTypeShape().getFields();
+                List<QuerySelection> queries = new ConvertManager(methodInvocations, methodHierarchies, fields).run();
             }
         }
     }
