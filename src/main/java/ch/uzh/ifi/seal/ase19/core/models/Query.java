@@ -1,7 +1,6 @@
 package ch.uzh.ifi.seal.ase19.core.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class Query {
     // TODO hierarchy?
@@ -38,5 +37,17 @@ public class Query {
 
     public EnclosingMethodSignature getEnclosingMethodSignature() {
         return enclosingMethodSignature;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Query query = (Query) o;
+        return Objects.equals(receiverType, query.receiverType) &&
+                surroundingType == query.surroundingType &&
+                objectOrigin == query.objectOrigin &&
+                Objects.equals(requiredType, query.requiredType) &&
+                Objects.equals(enclosingMethodSignature, query.enclosingMethodSignature);
     }
 }

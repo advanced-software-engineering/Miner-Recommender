@@ -1,13 +1,8 @@
 package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
-import cc.kave.commons.model.naming.codeelements.IFieldName;
-import cc.kave.commons.model.naming.codeelements.IMethodName;
-import cc.kave.commons.model.typeshapes.IMemberHierarchy;
-import cc.kave.commons.utils.ssts.SSTPrintingUtils;
 import ch.uzh.ifi.seal.ase19.core.IoHelper;
-import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
-import ch.uzh.ifi.seal.ase19.core.models.QuerySelection;
+import ch.uzh.ifi.seal.ase19.core.PersistenceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,12 +28,13 @@ public class Miner {
         logger.info("Context directory is: " + contextDirectory);
         logger.info("Model directory is: " + modelDirectory);
 
-        readContextsFromDisk(contextDirectory);
+        readContextsFromDisk(contextDirectory, modelDirectory);
     }
 
 
-    private static void readContextsFromDisk(String contextDirectory) {
-        SSTProcessor processor = new SSTProcessor();
+    private static void readContextsFromDisk(String contextDirectory, String modelDirectory) {
+        PersistenceManager persistence = new PersistenceManager(modelDirectory);
+        ContextProcessor processor = new ContextProcessor(persistence);
         Set<String> contextList = IoHelper.findAllZips(contextDirectory);
 
         for (String zip : contextList) {
@@ -47,10 +43,7 @@ public class Miner {
             List<Context> contexts = IoHelper.read(contextDirectory.concat(zip));
 
             for (Context context : contexts) {
-                List<MethodInvocationContext> methodInvocations = processor.process(context.getSST());
-                Set<IMemberHierarchy<IMethodName>> methodHierarchies = context.getTypeShape().getMethodHierarchies();
-                Set<IFieldName> fields = context.getTypeShape().getFields();
-                List<QuerySelection> queries = new ConvertManager(methodInvocations, methodHierarchies, fields).run();
+                processor.run(context);
             }
         }
     }

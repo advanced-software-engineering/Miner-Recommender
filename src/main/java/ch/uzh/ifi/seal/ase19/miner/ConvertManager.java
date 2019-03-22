@@ -9,34 +9,20 @@ import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
 import ch.uzh.ifi.seal.ase19.core.SSTUtils;
 import ch.uzh.ifi.seal.ase19.core.models.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 class ConvertManager {
-    private List<MethodInvocationContext> methodInvocationContexts;
+    private MethodInvocationContext methodInvocationContext;
     private Set<IMemberHierarchy<IMethodName>> methodHierarchy;
     private Set<IFieldName> fields;
 
-    ConvertManager(List<MethodInvocationContext> methodInvocationContexts, Set<IMemberHierarchy<IMethodName>> methodHierarchy, Set<IFieldName> fields) {
-        this.methodInvocationContexts = methodInvocationContexts;
+    ConvertManager(MethodInvocationContext methodInvocationContext, Set<IMemberHierarchy<IMethodName>> methodHierarchy, Set<IFieldName> fields) {
+        this.methodInvocationContext = methodInvocationContext;
         this.methodHierarchy = methodHierarchy;
         this.fields = fields;
     }
 
-    List<QuerySelection> run() {
-        List<QuerySelection> ret = new ArrayList<>();
-        for (MethodInvocationContext methodInvocationContext : methodInvocationContexts) {
-            QuerySelection query = toQuerySelection(methodInvocationContext);
-            if (query != null) {
-                ret.add(query);
-            }
-
-        }
-        return ret;
-    }
-
-    private QuerySelection toQuerySelection(MethodInvocationContext methodInvocationContext) {
+    QuerySelection toQuerySelection() {
         IInvocationExpression methodInvocation = methodInvocationContext.getMethodInvocation();
 
         IMethodName method = methodInvocation.getMethodName();
