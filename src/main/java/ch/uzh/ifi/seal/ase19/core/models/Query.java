@@ -8,26 +8,15 @@ public class Query {
     private String receiverType;
     private SurroundingType surroundingType;
     private ObjectOrigin objectOrigin;
-    private List<String> requiredType;
+    private String requiredType;
     private EnclosingMethodSignature enclosingMethodSignature;
 
-    public Query(String receiverType, SurroundingType surroundingType, ObjectOrigin objectOrigin, List<String> requiredType, EnclosingMethodSignature enclosingMethodSignature) {
+
+    public Query(String receiverType, SurroundingType surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
         this.receiverType = receiverType;
         this.surroundingType = surroundingType;
         this.objectOrigin = objectOrigin;
         this.requiredType = requiredType;
-        this.enclosingMethodSignature = enclosingMethodSignature;
-    }
-
-    public Query(String receiverType, SurroundingType surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
-        List<String> requiredTypeAsList = new ArrayList() {{
-            add(requiredType);
-        }};
-
-        this.receiverType = receiverType;
-        this.surroundingType = surroundingType;
-        this.objectOrigin = objectOrigin;
-        this.requiredType = requiredTypeAsList;
         this.enclosingMethodSignature = enclosingMethodSignature;
     }
 
@@ -43,7 +32,7 @@ public class Query {
         return objectOrigin;
     }
 
-    public List<String> getRequiredType() {
+    public String getRequiredType() {
         return requiredType;
     }
 

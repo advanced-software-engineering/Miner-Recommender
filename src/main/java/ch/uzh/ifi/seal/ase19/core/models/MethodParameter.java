@@ -1,5 +1,7 @@
 package ch.uzh.ifi.seal.ase19.core.models;
 
+import ch.uzh.ifi.seal.ase19.core.SSTUtils;
+
 import java.util.Objects;
 
 public class MethodParameter {
@@ -8,7 +10,7 @@ public class MethodParameter {
 
     public MethodParameter(String name, String type) {
         this.name = name;
-        this.type = type;
+        this.type = SSTUtils.getFullyQualifiedNameWithoutGenerics(type);
     }
 
     public String getName() {
