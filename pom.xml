@@ -4,13 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>uzh.ch.ase19</groupId>
-  <artifactId>RecommenderSystem</artifactId>
+  <groupId>ch.uzh.ifi.seal</groupId>
+  <artifactId>ase19</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>RecommenderSystem</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/mustard123/ASE19</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
