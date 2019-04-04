@@ -7,5 +7,5 @@ public interface IPersistenceManager {
 
     void save(QuerySelection model);
 
-    QuerySelection load(String identifier, ResultType type);
+    ReceiverTypeQueries load(String identifier, ResultType type);
 }

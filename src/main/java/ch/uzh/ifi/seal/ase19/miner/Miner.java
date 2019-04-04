@@ -39,9 +39,6 @@ public class Miner {
         ContextProcessor processor = new ContextProcessor(persistence);
         Set<String> contextList = IoHelper.findAllZips(contextDirectory);
 
-        QuerySelection a = persistence.load("ACAT.Lib.Core.AbbreviationsManagement.Abbreviation", ResultType.METHOD);
-        System.out.println(a.getSelection().getFullName());
-        System.out.println(a.getSelection().getValueType().getFullName());
         for (String zip : contextList) {
             logger.info("Process zip: " + zip);
 

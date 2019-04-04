@@ -28,6 +28,14 @@ public class QuerySelection {
         return selection;
     }
 
+    public void addToFrequence(long add){
+        frequency += add;
+    }
+
+    public long getFrequency() {
+        return frequency;
+    }
+
     public boolean same(QuerySelection other) {
         return Objects.equals(query, other.query) && Objects.equals(selection, other.selection);
     }

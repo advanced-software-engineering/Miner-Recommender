@@ -18,16 +18,19 @@ public class PersistenceManager implements IPersistenceManager {
     @Override
     public void save(QuerySelection model) {
         File file = FileUtils.getPersistenceFile(modelDirectory, model.getReceiverType(), model.getResultType());
-        JsonUtils.toJson(model, file);
+        ReceiverTypeQueries storageFile = load(model.getReceiverType(), model.getResultType());
+        storageFile.addItem(model);
+        JsonUtils.toJson(storageFile, file);
     }
 
     @Override
-    public QuerySelection load(String receiverType, ResultType type) {
-        try {
-            File file = FileUtils.getPersistenceFile(modelDirectory, receiverType, type);
-            return JsonUtils.fromJson(file, QuerySelection.class);
-        } catch (RuntimeException e) {
-            return null;
+    public ReceiverTypeQueries load(String receiverType, ResultType type) {
+        File file = FileUtils.getPersistenceFile(modelDirectory, receiverType, type);
+
+        if(file.exists()){
+            return JsonUtils.fromJson(file, ReceiverTypeQueries.class);
+        }else{
+            return new ReceiverTypeQueries();
         }
     }
 }
