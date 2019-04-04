@@ -29,7 +29,7 @@ class ConvertManager {
         String receiverType = SSTUtils.getFullyQualifiedNameWithoutGenerics(method.getDeclaringType().getFullName());
         String selectedMethodName = method.getFullName();
         String requiredType = SSTUtils.getFullyQualifiedNameWithoutGenerics(method.getReturnType().getFullName());
-        SurroundingType surroundingType = methodInvocationContext.getSurroundingType();
+        SurroundingExpression surroundingType = methodInvocationContext.getSurroundingType();
 
         EnclosingMethodSignature enclosingMethodSignature = null;
         if (methodInvocationContext.getMethodDeclaration() != null) {

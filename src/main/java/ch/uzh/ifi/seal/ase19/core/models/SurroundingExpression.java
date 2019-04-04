@@ -1,6 +1,6 @@
 package ch.uzh.ifi.seal.ase19.core.models;
 
-public enum SurroundingType {
+public enum SurroundingExpression {
     METHOD_BODY,
     BRANCHING_CONDITION,
     LOOP,

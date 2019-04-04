@@ -3,15 +3,14 @@ package ch.uzh.ifi.seal.ase19.core.models;
 import java.util.Objects;
 
 public class Query {
-    // TODO hierarchy?
     private String receiverType;
-    private SurroundingType surroundingType;
+    private SurroundingExpression surroundingType;
     private ObjectOrigin objectOrigin;
     private String requiredType;
     private EnclosingMethodSignature enclosingMethodSignature;
 
 
-    public Query(String receiverType, SurroundingType surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
+    public Query(String receiverType, SurroundingExpression surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
         this.receiverType = receiverType;
         this.surroundingType = surroundingType;
         this.objectOrigin = objectOrigin;
@@ -23,7 +22,7 @@ public class Query {
         return receiverType;
     }
 
-    public SurroundingType getSurroundingType() {
+    public SurroundingExpression getSurroundingType() {
         return surroundingType;
     }
 

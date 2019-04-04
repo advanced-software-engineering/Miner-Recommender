@@ -8,7 +8,7 @@ import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.statements.IAssignment;
 import cc.kave.commons.model.ssts.statements.IReturnStatement;
 import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
-import ch.uzh.ifi.seal.ase19.core.models.SurroundingType;
+import ch.uzh.ifi.seal.ase19.core.models.SurroundingExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,32 +23,32 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
 
     @Override
     public Void visit(IIfElseBlock block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.BRANCHING_CONDITION));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.BRANCHING_CONDITION));
     }
 
     @Override
     public Void visit(IForLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.LOOP));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(IForEachLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.LOOP));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(IWhileLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.LOOP));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(IDoLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.LOOP));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(ISwitchBlock block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.BRANCHING_CONDITION));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.BRANCHING_CONDITION));
     }
 
     @Override
@@ -60,22 +60,22 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
 
     @Override
     public Void visit(IAssignment stmt, MethodInvocationContext context) {
-        return super.visit(stmt, context.setSurroundingType(SurroundingType.ASSIGNMENT));
+        return super.visit(stmt, context.setSurroundingType(SurroundingExpression.ASSIGNMENT));
     }
 
     @Override
     public Void visit(IReturnStatement stmt, MethodInvocationContext context) {
-        return super.visit(stmt, context.setSurroundingType(SurroundingType.RETURN_STATEMENT));
+        return super.visit(stmt, context.setSurroundingType(SurroundingExpression.RETURN_STATEMENT));
     }
 
     @Override
     public Void visit(ILambdaExpression expr, MethodInvocationContext context) {
-        return super.visit(expr, context.setSurroundingType(SurroundingType.LAMBDA));
+        return super.visit(expr, context.setSurroundingType(SurroundingExpression.LAMBDA));
     }
 
     @Override
     public Void visit(ITryBlock block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingType.TRY));
+        return super.visit(block, context.setSurroundingType(SurroundingExpression.TRY));
     }
 
     List<MethodInvocationContext> getFound() {
