@@ -6,7 +6,7 @@ import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import cc.kave.commons.model.ssts.references.IVariableReference;
 import cc.kave.commons.model.typeshapes.IMemberHierarchy;
 import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
-import ch.uzh.ifi.seal.ase19.core.SSTUtils;
+import ch.uzh.ifi.seal.ase19.core.utils.SSTUtils;
 import ch.uzh.ifi.seal.ase19.core.models.*;
 
 import java.util.Set;
@@ -27,7 +27,6 @@ class ConvertManager {
 
         IMethodName method = methodInvocation.getMethodName();
         String receiverType = SSTUtils.getFullyQualifiedNameWithoutGenerics(method.getDeclaringType().getFullName());
-        String selectedMethodName = method.getFullName();
         String requiredType = SSTUtils.getFullyQualifiedNameWithoutGenerics(method.getReturnType().getFullName());
         SurroundingExpression surroundingType = methodInvocationContext.getSurroundingType();
 
@@ -47,7 +46,7 @@ class ConvertManager {
         }
 
         Query query = new Query(ResultType.METHOD, receiverType, surroundingType, objectOrigin, requiredType, enclosingMethodSignature);
-        return new QuerySelection(query, selectedMethodName);
+        return new QuerySelection(query, method);
     }
 
     private ObjectOrigin getObjectOrigin(String variableName, EnclosingMethodSignature enclosingMethodSignature) {

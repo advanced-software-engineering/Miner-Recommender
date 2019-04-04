@@ -1,6 +1,6 @@
 package ch.uzh.ifi.seal.ase19.core.models;
 
-import ch.uzh.ifi.seal.ase19.core.SSTUtils;
+import ch.uzh.ifi.seal.ase19.core.utils.SSTUtils;
 
 import java.util.Objects;
 

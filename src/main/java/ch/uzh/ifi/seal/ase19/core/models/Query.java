@@ -19,6 +19,10 @@ public class Query {
         this.enclosingMethodSignature = enclosingMethodSignature;
     }
 
+    public ResultType getResultType() {
+        return resultType;
+    }
+
     public String getReceiverType() {
         return receiverType;
     }

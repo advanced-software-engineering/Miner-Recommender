@@ -30,7 +30,7 @@ class ContextProcessor {
         for (MethodInvocationContext methodInvocationContext : methodInvocationContexts) {
             QuerySelection querySelection = new ConvertManager(methodInvocationContext, methodHierarchies, fields).toQuerySelection();
             if (querySelection != null) {
-                //persistenceManager.save();
+                persistenceManager.save(querySelection);
             }
         }
     }

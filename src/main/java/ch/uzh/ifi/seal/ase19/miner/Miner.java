@@ -1,7 +1,9 @@
 package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
-import ch.uzh.ifi.seal.ase19.core.IoHelper;
+import ch.uzh.ifi.seal.ase19.core.models.QuerySelection;
+import ch.uzh.ifi.seal.ase19.core.models.ResultType;
+import ch.uzh.ifi.seal.ase19.core.utils.IoHelper;
 import ch.uzh.ifi.seal.ase19.core.PersistenceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +39,9 @@ public class Miner {
         ContextProcessor processor = new ContextProcessor(persistence);
         Set<String> contextList = IoHelper.findAllZips(contextDirectory);
 
+        QuerySelection a = persistence.load("ACAT.Lib.Core.AbbreviationsManagement.Abbreviation", ResultType.METHOD);
+        System.out.println(a.getSelection().getFullName());
+        System.out.println(a.getSelection().getValueType().getFullName());
         for (String zip : contextList) {
             logger.info("Process zip: " + zip);
 

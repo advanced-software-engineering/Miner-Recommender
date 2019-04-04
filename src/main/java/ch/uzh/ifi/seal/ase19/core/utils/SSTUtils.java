@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.ase19.core;
+package ch.uzh.ifi.seal.ase19.core.utils;
 
 public class SSTUtils {
     public static String getFullyQualifiedNameWithoutGenerics(String in) {

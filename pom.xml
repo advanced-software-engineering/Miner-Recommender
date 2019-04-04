@@ -6,7 +6,7 @@
 
     <groupId>ch.uzh.ifi.seal</groupId>
     <artifactId>ase19</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <name>RecommenderSystem</name>
     <url>https://github.com/mustard123/ASE19</url>
