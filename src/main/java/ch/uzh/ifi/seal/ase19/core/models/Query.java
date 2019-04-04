@@ -3,14 +3,15 @@ package ch.uzh.ifi.seal.ase19.core.models;
 import java.util.Objects;
 
 public class Query {
+    private ResultType resultType;
     private String receiverType;
     private SurroundingExpression surroundingType;
     private ObjectOrigin objectOrigin;
     private String requiredType;
     private EnclosingMethodSignature enclosingMethodSignature;
 
-
-    public Query(String receiverType, SurroundingExpression surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
+    public Query(ResultType resultType, String receiverType, SurroundingExpression surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
+        this.resultType = resultType;
         this.receiverType = receiverType;
         this.surroundingType = surroundingType;
         this.objectOrigin = objectOrigin;
