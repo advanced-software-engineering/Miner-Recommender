@@ -45,7 +45,7 @@ class ConvertManager {
             objectOrigin = getObjectOrigin(referenceIdentifier, enclosingMethodSignature);
         }
 
-        Query query = new Query(ResultType.METHOD, receiverType, surroundingType, objectOrigin, requiredType, enclosingMethodSignature);
+        Query query = new Query(ResultType.METHOD_INVOCATION, receiverType, surroundingType, objectOrigin, requiredType, enclosingMethodSignature);
         return new QuerySelection(query, method);
     }
 
