@@ -54,4 +54,16 @@ public class Query {
                 Objects.equals(requiredType, query.requiredType) &&
                 Objects.equals(enclosingMethodSignature, query.enclosingMethodSignature);
     }
+
+    @Override
+    public String toString() {
+        return "Query{" +
+                "resultType=" + resultType +
+                ", receiverType='" + receiverType + '\'' +
+                ", surroundingType=" + surroundingType +
+                ", objectOrigin=" + objectOrigin +
+                ", requiredType='" + requiredType + '\'' +
+                ", enclosingMethodSignature=" + enclosingMethodSignature +
+                '}';
+    }
 }

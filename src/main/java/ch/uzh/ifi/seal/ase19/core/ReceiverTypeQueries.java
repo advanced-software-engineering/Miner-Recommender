@@ -27,4 +27,8 @@ public class ReceiverTypeQueries {
             items.add(qs);
         }
     }
+
+    public List<QuerySelection> getItems() {
+        return items;
+    }
 }

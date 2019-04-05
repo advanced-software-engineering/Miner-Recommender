@@ -39,4 +39,13 @@ public class QuerySelection {
     public boolean same(QuerySelection other) {
         return Objects.equals(query, other.query) && Objects.equals(selection, other.selection);
     }
+
+    @Override
+    public String toString() {
+        return "QuerySelection{" +
+                query.toString() +
+                ", selection=" + selection +
+                ", frequency=" + frequency +
+                '}';
+    }
 }
