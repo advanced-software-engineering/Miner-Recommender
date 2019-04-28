@@ -38,7 +38,7 @@ class ReceiverTypeQueriesTest {
     @Test
     void addModifiedItem() {
         sut.addItem(item1);
-        item1.addToFrequence(5);
+        item1.addToFrequency(5);
         sut.addItem(item1);
 
         Assertions.assertEquals(1, sut.getItems().size());
@@ -56,7 +56,7 @@ class ReceiverTypeQueriesTest {
     @Test
     void addComplex() {
         sut.addItem(item1);
-        item1.addToFrequence(5);
+        item1.addToFrequency(5);
         sut.addItem(item2);
         sut.addItem(item1);
 

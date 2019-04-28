@@ -17,7 +17,7 @@ public class ReceiverTypeQueries {
 
         for (QuerySelection item : items) {
             if (item.same(qs)) {
-                item.addToFrequence(qs.getFrequency());
+                item.addToFrequency(qs.getFrequency());
                 found = true;
                 break;
             }
