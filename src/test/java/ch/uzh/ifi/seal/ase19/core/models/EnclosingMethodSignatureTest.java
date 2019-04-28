@@ -24,7 +24,7 @@ class EnclosingMethodSignatureTest {
         when(m.getDeclaringType()).thenReturn(tn);
         when(m.getFullName()).thenReturn(fullyQualifiedName);
         when(m.getReturnType()).thenReturn(tn);
-        List<IParameterName> params = new ArrayList<IParameterName>(){{
+        List<IParameterName> params = new ArrayList<IParameterName>() {{
             IParameterName pm = mock(IParameterName.class);
             when(pm.getName()).thenReturn("name");
             ITypeName tn = mock(ITypeName.class);
@@ -50,7 +50,7 @@ class EnclosingMethodSignatureTest {
         when(mn1.getDeclaringType()).thenReturn(tn1);
         when(mn1.getFullName()).thenReturn(fullyQualifiedName1);
         when(mn1.getReturnType()).thenReturn(tn1);
-        List<IParameterName> params1 = new ArrayList<IParameterName>(){{
+        List<IParameterName> params1 = new ArrayList<IParameterName>() {{
             IParameterName pm = mock(IParameterName.class);
             when(pm.getName()).thenReturn("name");
             ITypeName tn = mock(ITypeName.class);
@@ -70,7 +70,7 @@ class EnclosingMethodSignatureTest {
         when(mn2.getDeclaringType()).thenReturn(tn2);
         when(mn2.getFullName()).thenReturn(fullyQualifiedName2);
         when(mn2.getReturnType()).thenReturn(tn2);
-        List<IParameterName> params2 = new ArrayList<IParameterName>(){{
+        List<IParameterName> params2 = new ArrayList<IParameterName>() {{
             IParameterName pm = mock(IParameterName.class);
             when(pm.getName()).thenReturn("name");
             ITypeName tn = mock(ITypeName.class);
@@ -95,7 +95,7 @@ class EnclosingMethodSignatureTest {
         when(mn1.getDeclaringType()).thenReturn(tn1);
         when(mn1.getFullName()).thenReturn(fullyQualifiedName1);
         when(mn1.getReturnType()).thenReturn(tn1);
-        List<IParameterName> params1 = new ArrayList<IParameterName>(){{
+        List<IParameterName> params1 = new ArrayList<IParameterName>() {{
             IParameterName pm = mock(IParameterName.class);
             when(pm.getName()).thenReturn("name");
             ITypeName tn = mock(ITypeName.class);
@@ -115,7 +115,7 @@ class EnclosingMethodSignatureTest {
         when(mn2.getDeclaringType()).thenReturn(tn2);
         when(mn2.getFullName()).thenReturn(fullyQualifiedName2);
         when(mn2.getReturnType()).thenReturn(tn2);
-        List<IParameterName> params2 = new ArrayList<IParameterName>(){{
+        List<IParameterName> params2 = new ArrayList<IParameterName>() {{
             IParameterName pm = mock(IParameterName.class);
             when(pm.getName()).thenReturn("otherName");
             ITypeName tn = mock(ITypeName.class);
