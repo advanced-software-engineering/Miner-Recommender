@@ -24,7 +24,7 @@ public class ReceiverTypeQueries {
         }
 
         if (!found) {
-            items.add(qs);
+            items.add(qs.getCopy());
         }
     }
 

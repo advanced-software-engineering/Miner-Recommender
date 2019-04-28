@@ -10,6 +10,12 @@ public class QuerySelection {
     private IMemberName selection;
     private long frequency;
 
+    public QuerySelection(Query query, IMemberName selection, long frequency) {
+        this.query = query;
+        this.selection = selection;
+        this.frequency = frequency;
+    }
+
     public QuerySelection(Query query, IMemberName selection) {
         this.query = query;
         this.selection = selection;
@@ -38,6 +44,10 @@ public class QuerySelection {
 
     public boolean same(QuerySelection other) {
         return Objects.equals(query, other.query) && Objects.equals(selection, other.selection);
+    }
+
+    public QuerySelection getCopy() {
+        return new QuerySelection(query, selection, frequency);
     }
 
     @Override
