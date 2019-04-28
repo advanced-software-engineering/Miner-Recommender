@@ -6,8 +6,8 @@ import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import cc.kave.commons.model.ssts.references.IVariableReference;
 import cc.kave.commons.model.typeshapes.IMemberHierarchy;
 import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
-import ch.uzh.ifi.seal.ase19.core.utils.SSTUtils;
 import ch.uzh.ifi.seal.ase19.core.models.*;
+import ch.uzh.ifi.seal.ase19.core.utils.SSTUtils;
 
 import java.util.Set;
 

@@ -8,22 +8,22 @@ import java.util.List;
 public class ReceiverTypeQueries {
     private List<QuerySelection> items;
 
-    public ReceiverTypeQueries(){
+    public ReceiverTypeQueries() {
         items = new ArrayList<>();
     }
 
-    public void addItem(QuerySelection qs){
+    public void addItem(QuerySelection qs) {
         boolean found = false;
 
-        for(QuerySelection item : items){
-            if(item.same(qs)){
+        for (QuerySelection item : items) {
+            if (item.same(qs)) {
                 item.addToFrequence(qs.getFrequency());
                 found = true;
                 break;
             }
         }
 
-        if(!found){
+        if (!found) {
             items.add(qs);
         }
     }

@@ -27,9 +27,9 @@ public class PersistenceManager implements IPersistenceManager {
     public ReceiverTypeQueries load(String receiverType, ResultType type) {
         File file = FileUtils.getPersistenceFile(modelDirectory, receiverType, type);
 
-        if(file.exists()){
+        if (file.exists()) {
             return JsonUtils.fromJson(file, ReceiverTypeQueries.class);
-        }else{
+        } else {
             return new ReceiverTypeQueries();
         }
     }

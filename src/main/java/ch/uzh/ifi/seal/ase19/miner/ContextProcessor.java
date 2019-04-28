@@ -26,7 +26,6 @@ class ContextProcessor {
         Set<IMemberHierarchy<IMethodName>> methodHierarchies = context.getTypeShape().getMethodHierarchies();
         Set<IFieldName> fields = context.getTypeShape().getFields();
 
-
         for (MethodInvocationContext methodInvocationContext : methodInvocationContexts) {
             QuerySelection querySelection = new ConvertManager(methodInvocationContext, methodHierarchies, fields).toQuerySelection();
             if (querySelection != null) {

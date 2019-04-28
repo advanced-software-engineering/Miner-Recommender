@@ -16,7 +16,7 @@ public class QuerySelection {
         this.frequency = 1;
     }
 
-    public ResultType getResultType(){
+    public ResultType getResultType() {
         return query.getResultType();
     }
 
@@ -28,7 +28,7 @@ public class QuerySelection {
         return selection;
     }
 
-    public void addToFrequence(long add){
+    public void addToFrequence(long add) {
         frequency += add;
     }
 

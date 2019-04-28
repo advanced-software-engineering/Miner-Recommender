@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 public class FileUtils {
     private final static String suffix = ".json";
 
-    public static File getPersistenceFile(String modelDirectory, String receiverType, ResultType type){
+    public static File getPersistenceFile(String modelDirectory, String receiverType, ResultType type) {
         return Paths.get(modelDirectory, type.toString(), receiverType + suffix).toFile();
     }
 }

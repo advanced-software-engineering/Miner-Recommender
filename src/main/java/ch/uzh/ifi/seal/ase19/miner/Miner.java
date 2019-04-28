@@ -1,10 +1,8 @@
 package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
-import ch.uzh.ifi.seal.ase19.core.models.QuerySelection;
-import ch.uzh.ifi.seal.ase19.core.models.ResultType;
-import ch.uzh.ifi.seal.ase19.core.utils.IoHelper;
 import ch.uzh.ifi.seal.ase19.core.PersistenceManager;
+import ch.uzh.ifi.seal.ase19.core.utils.IoHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
