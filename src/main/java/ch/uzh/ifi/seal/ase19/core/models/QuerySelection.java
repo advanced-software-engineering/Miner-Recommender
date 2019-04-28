@@ -22,6 +22,10 @@ public class QuerySelection {
         this.frequency = 1;
     }
 
+    public Query getQuery() {
+        return query;
+    }
+
     public ResultType getResultType() {
         return query.getResultType();
     }

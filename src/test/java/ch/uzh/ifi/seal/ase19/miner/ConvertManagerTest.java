@@ -55,7 +55,6 @@ class ConvertManagerTest {
         ConvertManager sut = new ConvertManager(mic, mh, f);
         QuerySelection qs = sut.toQuerySelection();
 
-        System.out.println(qs);
         Assertions.assertEquals(1, qs.getFrequency());
         Assertions.assertEquals(mn, qs.getSelection());
         Assertions.assertEquals(fullyQualifiedName, qs.getReceiverType());

@@ -5,6 +5,7 @@ import cc.kave.commons.model.naming.codeelements.IParameterName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EnclosingMethodSignature {
     private String fullyQualifiedClassName;
@@ -63,5 +64,17 @@ public class EnclosingMethodSignature {
                 && methodName.equals(other.methodName)
                 && fullyQualifiedReturnType.equals(other.fullyQualifiedReturnType)
                 && isParameterListEqual;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EnclosingMethodSignature that = (EnclosingMethodSignature) o;
+        return Objects.equals(fullyQualifiedClassName, that.fullyQualifiedClassName) &&
+                Objects.equals(methodName, that.methodName) &&
+                Objects.equals(fullyQualifiedReturnType, that.fullyQualifiedReturnType) &&
+                Objects.equals(parameters, that.parameters) &&
+                Objects.equals(superMethodSignature, that.superMethodSignature);
     }
 }
