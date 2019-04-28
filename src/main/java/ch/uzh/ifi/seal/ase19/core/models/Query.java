@@ -66,4 +66,9 @@ public class Query {
                 ", enclosingMethodSignature=" + enclosingMethodSignature +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(resultType, receiverType, surroundingType, objectOrigin, requiredType, enclosingMethodSignature);
+    }
 }

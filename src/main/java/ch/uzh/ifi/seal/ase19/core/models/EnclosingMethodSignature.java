@@ -77,4 +77,9 @@ public class EnclosingMethodSignature {
                 Objects.equals(parameters, that.parameters) &&
                 Objects.equals(superMethodSignature, that.superMethodSignature);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullyQualifiedClassName, methodName, fullyQualifiedReturnType, parameters, superMethodSignature);
+    }
 }
