@@ -37,14 +37,18 @@ public class Miner {
         ContextProcessor processor = new ContextProcessor(persistence);
         Set<String> contextList = IoHelper.findAllZips(contextDirectory);
 
+        int counter = 1;
+        int total = contextList.size();
         for (String zip : contextList) {
-            logger.info("Process zip: " + zip);
+            logger.info("Process zip (" + counter + "/" + total + "): " + zip);
 
             List<Context> contexts = IoHelper.read(contextDirectory.concat(zip));
 
             for (Context context : contexts) {
                 processor.run(context);
             }
+
+            counter++;
         }
     }
 }
