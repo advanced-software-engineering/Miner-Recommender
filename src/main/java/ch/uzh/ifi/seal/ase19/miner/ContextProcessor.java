@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-class ContextProcessor {
+public class ContextProcessor {
 
     private PersistenceManager persistenceManager;
 
@@ -21,17 +21,28 @@ class ContextProcessor {
         this.persistenceManager = persistenceManager;
     }
 
-    void run(Context context) {
-        List<MethodInvocationContext> methodInvocationContexts = getMethodContext(context.getSST());
-        Set<IMemberHierarchy<IMethodName>> methodHierarchies = context.getTypeShape().getMethodHierarchies();
-        Set<IFieldName> fields = context.getTypeShape().getFields();
+    void runAndPersist(Context context) {
+        List<QuerySelection> querySelections = run(context);
 
-        for (MethodInvocationContext methodInvocationContext : methodInvocationContexts) {
-            QuerySelection querySelection = new ConvertManager(methodInvocationContext, methodHierarchies, fields).toQuerySelection();
+        for (QuerySelection querySelection : querySelections) {
             if (querySelection != null) {
                 persistenceManager.save(querySelection);
             }
         }
+    }
+
+    public List<QuerySelection> run(Context context) {
+        List<MethodInvocationContext> methodInvocationContexts = getMethodContext(context.getSST());
+        Set<IMemberHierarchy<IMethodName>> methodHierarchies = context.getTypeShape().getMethodHierarchies();
+        Set<IFieldName> fields = context.getTypeShape().getFields();
+
+        List<QuerySelection> ret = new ArrayList<>();
+        for (MethodInvocationContext methodInvocationContext : methodInvocationContexts) {
+            QuerySelection querySelection = new ConvertManager(methodInvocationContext, methodHierarchies, fields).toQuerySelection();
+            ret.add(querySelection);
+        }
+
+        return ret;
     }
 
     private List<MethodInvocationContext> getMethodContext(ISST sst) {

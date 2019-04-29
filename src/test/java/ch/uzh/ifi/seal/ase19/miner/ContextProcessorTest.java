@@ -20,14 +20,14 @@ class ContextProcessorTest {
     }
 
     @Test
-    void run() {
+    void runAndPersist() {
         Context c = mock(Context.class);
         ITypeShape ts = mock(ITypeShape.class);
         when(ts.getMethodHierarchies()).thenReturn(null);
         when(ts.getFields()).thenReturn(null);
         when(c.getTypeShape()).thenReturn(ts);
 
-        sut.run(c);
+        sut.runAndPersist(c);
 
         verify(pm, times(0)).save(any());
     }

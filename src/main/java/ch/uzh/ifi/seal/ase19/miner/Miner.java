@@ -45,7 +45,7 @@ public class Miner {
             List<Context> contexts = IoHelper.read(contextDirectory.concat(zip));
 
             for (Context context : contexts) {
-                processor.run(context);
+                processor.runAndPersist(context);
             }
 
             counter++;
