@@ -29,6 +29,6 @@ class ContextProcessorTest {
 
         sut.runAndPersist(c);
 
-        verify(pm, times(0)).save(any());
+        verify(pm, times(0)).saveModel(any());
     }
 }

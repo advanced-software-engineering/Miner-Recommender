@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.ase19.recommender;
 
 import ch.uzh.ifi.seal.ase19.core.IPersistenceManager;
+import ch.uzh.ifi.seal.ase19.core.InMemoryPersistenceManager;
 import ch.uzh.ifi.seal.ase19.core.PersistenceManager;
 import ch.uzh.ifi.seal.ase19.core.ReceiverTypeQueries;
 import ch.uzh.ifi.seal.ase19.core.models.QuerySelection;
@@ -21,7 +22,7 @@ public class Demo {
 
         logger.info("Model directory is: " + modelDirectory);
 
-        IPersistenceManager pm = new PersistenceManager(modelDirectory);
+        IPersistenceManager pm = new InMemoryPersistenceManager(modelDirectory);
 
         String fullyQualifiedReceiverObject = "System.IO.StreamReader";
         ReceiverTypeQueries rtq = pm.load(fullyQualifiedReceiverObject, ResultType.METHOD_INVOCATION);

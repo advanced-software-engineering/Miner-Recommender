@@ -1,7 +1,7 @@
 package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.events.completionevents.Context;
-import ch.uzh.ifi.seal.ase19.core.PersistenceManager;
+import ch.uzh.ifi.seal.ase19.core.InMemoryPersistenceManager;
 import ch.uzh.ifi.seal.ase19.core.utils.IoHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +33,7 @@ public class Miner {
 
 
     private static void readContextsFromDisk(String contextDirectory, String modelDirectory) {
-        PersistenceManager persistence = new PersistenceManager(modelDirectory);
+        InMemoryPersistenceManager persistence = new InMemoryPersistenceManager(modelDirectory);
         ContextProcessor processor = new ContextProcessor(persistence);
         Set<String> contextList = IoHelper.findAllZips(contextDirectory);
 
@@ -46,6 +46,10 @@ public class Miner {
 
             for (Context context : contexts) {
                 processor.runAndPersist(context);
+            }
+
+            if(counter % 100 == 0){
+                persistence.saveOnFileSystem();
             }
 
             counter++;

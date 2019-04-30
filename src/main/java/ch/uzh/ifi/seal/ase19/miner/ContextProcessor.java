@@ -5,8 +5,8 @@ import cc.kave.commons.model.naming.codeelements.IFieldName;
 import cc.kave.commons.model.naming.codeelements.IMethodName;
 import cc.kave.commons.model.ssts.ISST;
 import cc.kave.commons.model.typeshapes.IMemberHierarchy;
+import ch.uzh.ifi.seal.ase19.core.IPersistenceManager;
 import ch.uzh.ifi.seal.ase19.core.MethodInvocationContext;
-import ch.uzh.ifi.seal.ase19.core.PersistenceManager;
 import ch.uzh.ifi.seal.ase19.core.models.QuerySelection;
 
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import java.util.Set;
 
 public class ContextProcessor {
 
-    private PersistenceManager persistenceManager;
+    private IPersistenceManager persistenceManager;
 
-    public ContextProcessor(PersistenceManager persistenceManager) {
+    public ContextProcessor(IPersistenceManager persistenceManager) {
         this.persistenceManager = persistenceManager;
     }
 
@@ -26,7 +26,7 @@ public class ContextProcessor {
 
         for (QuerySelection querySelection : querySelections) {
             if (querySelection != null) {
-                persistenceManager.save(querySelection);
+                persistenceManager.saveModel(querySelection);
             }
         }
     }

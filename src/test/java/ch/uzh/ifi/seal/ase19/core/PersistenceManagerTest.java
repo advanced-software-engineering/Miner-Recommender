@@ -29,14 +29,14 @@ class PersistenceManagerTest {
     }
 
     @Test
-    void save() {
+    void insert() {
         String fullyQualifiedName = "com.myClass";
         ResultType rt = ResultType.METHOD_INVOCATION;
 
         QuerySelection qs = mock(QuerySelection.class);
         when(qs.getReceiverType()).thenReturn(fullyQualifiedName);
         when(qs.getResultType()).thenReturn(rt);
-        sut.save(qs);
+        sut.saveModel(qs);
 
         ReceiverTypeQueries res = sut.load(fullyQualifiedName, rt);
         Assertions.assertNotEquals(0, res.getItems().size());
@@ -68,7 +68,7 @@ class PersistenceManagerTest {
 
         IMemberName mn = new MethodName("myMethod");
         QuerySelection qs = new QuerySelection(q, mn);
-        sut.save(qs);
+        sut.saveModel(qs);
 
         ReceiverTypeQueries res = sut.load(fullyQualifiedName, rt);
         QuerySelection item = res.getItems().get(0);
