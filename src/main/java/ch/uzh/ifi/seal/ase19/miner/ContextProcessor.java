@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class ContextProcessor {
 
-    private IPersistenceManager persistenceManager;
+    public IPersistenceManager persistenceManager;
 
     public ContextProcessor(IPersistenceManager persistenceManager) {
         this.persistenceManager = persistenceManager;
