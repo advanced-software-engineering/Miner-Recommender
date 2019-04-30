@@ -16,14 +16,14 @@ import java.util.ArrayList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class PersistenceManagerTest {
-    private PersistenceManager sut;
+class InMemoryPersistenceManagerTest {
+    private InMemoryPersistenceManager sut;
 
     @BeforeEach
     void before() {
         try {
             String dir = Files.createTempDirectory("ase").toAbsolutePath().toString();
-            sut = new PersistenceManager(dir);
+            sut = new InMemoryPersistenceManager(dir);
         } catch (IOException e) {
         }
     }
