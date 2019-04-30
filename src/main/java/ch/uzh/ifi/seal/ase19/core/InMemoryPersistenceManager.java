@@ -13,14 +13,6 @@ public class InMemoryPersistenceManager implements IPersistenceManager {
 
     public InMemoryPersistenceManager(String modelDirectory) {
         this.persistenceManager = new PersistenceManager(modelDirectory);
-        initalLoad();
-    }
-
-    private void initalLoad() {
-        for (Pair<String, ResultType> key : persistenceManager.getAllModels()) {
-            ReceiverTypeQueries value = persistenceManager.load(key.getLeft(), key.getRight());
-            db.put(key, value);
-        }
     }
 
     @Override
@@ -42,7 +34,7 @@ public class InMemoryPersistenceManager implements IPersistenceManager {
         ReceiverTypeQueries value = db.get(key);
 
         if (value == null) {
-            value = new ReceiverTypeQueries();
+            value = persistenceManager.load(receiverType, resultType);
             db.put(key, value);
         }
 
@@ -58,5 +50,7 @@ public class InMemoryPersistenceManager implements IPersistenceManager {
         for (Pair<String, ResultType> key : getAllModels()) {
             persistenceManager.replaceModels(db.get(key));
         }
+
+        db = new HashMap<>();
     }
 }
