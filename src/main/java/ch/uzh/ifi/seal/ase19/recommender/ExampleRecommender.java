@@ -39,10 +39,8 @@ public class ExampleRecommender {
         Set<Pair<IMemberName, Double>> result = recommender.query(query);
         System.out.printf("%-30s%-30s\n","Method name","Similarity measure");
         System.out.printf("%-30s%-30s\n","------------","--------------------");
-        result.forEach((Pair p)->{
-          IMemberName iMemberName = (IMemberName) p.getLeft();
-          double similarity = (double) p.getRight();
-          System.out.printf("%-30s%-30s\n",iMemberName.getName(),similarity);
+        result.forEach((Pair<IMemberName,Double> p)->{
+          System.out.printf("%-30s%-30s\n",p.getLeft().getName(),p.getRight());
 
         });
 
