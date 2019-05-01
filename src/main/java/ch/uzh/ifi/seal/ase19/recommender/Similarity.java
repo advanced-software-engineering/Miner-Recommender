@@ -10,7 +10,7 @@ import static java.util.Optional.of;
 public class Similarity {
 
     public static double calculateSimilarity(Query q1, Query q2) {
-        int similarityCounter = 0;
+        double similarityCounter = 0;
         int maxSimilarityValue = 0;
 
         if (q1 == null && q2 == null) {
@@ -27,6 +27,8 @@ public class Similarity {
         if (q1.getResultType() != null && q1.getResultType() != null) {
             if (q1.getResultType().equals(q2.getResultType()))
                 similarityCounter += 1;
+            else   // if ResultType is unequal similarity is automatically 0 (don't recommend unequal types!)
+                return 0.0;
         } else if (q1.getResultType() == null && q2.getResultType() == null) {
             similarityCounter += 1;
         }
@@ -83,11 +85,13 @@ public class Similarity {
                     similarityCounter += 1;
                 maxSimilarityValue += 1;
 
-                //increase the maxPossible similarity by longer list of paramaters, for each parameter, name and type can be similar thus multiply maxsimilarity by 2
+                //increase the maxPossible similarity by at most one, thus divide similarity increase by longer parameter list times two because foreach
+                // parameter name and type can be compared )
+                int parameterLength;
                 if (q1.getEnclosingMethodSignature().getParameters().size() > q2.getEnclosingMethodSignature().getParameters().size()) {
-                    maxSimilarityValue += q1.getEnclosingMethodSignature().getParameters().size() * 2;
+                    parameterLength = q1.getEnclosingMethodSignature().getParameters().size();
                 } else {
-                    maxSimilarityValue += q2.getEnclosingMethodSignature().getParameters().size() * 2;
+                    parameterLength = q2.getEnclosingMethodSignature().getParameters().size();
                 }
                 for (MethodParameter param1 : q1.getEnclosingMethodSignature().getParameters()
                         ) {
@@ -96,31 +100,36 @@ public class Similarity {
 
                         if (param1.getName() != null && param2.getName() != null) {
                             if (param1.getName().equals(param2.getName()))
-                                similarityCounter += 1;
+                                similarityCounter += (1.0/(parameterLength*2))*0.5;
 
                         } else if (param1.getName() == null && param2.getName() == null) {
-                            similarityCounter += 1;
+                            similarityCounter += (1.0/(parameterLength*2))*0.5;
                         }
 
                         if (param1.getType() != null && param2.getType() != null) {
 
                             if (param1.getType().equals(param2.getType()))
-                                similarityCounter += 1;
+                                similarityCounter += (1.0/(parameterLength*2))*1.5;
 
                         } else if (param1.getType() == null && param2.getType() == null) {
-                            similarityCounter += 1;
+                            similarityCounter += (1.0/(parameterLength*2))*1.5;
                         }
-
-
                     }
 
                 }
+                maxSimilarityValue +=1;
+
             }
 
 
         } else if (q1.getEnclosingMethodSignature() == null && q2.getEnclosingMethodSignature() == null) {
-            similarityCounter += 1;
-            maxSimilarityValue += 1;
+            //EnclosingMethodType from q1 and q2 are null so parameterSimilarity +1, parameterLength +1, getEnclosingMethodSignatureFullyQualifiedReturnType +1
+            // can be seen as the same too, account for that
+            similarityCounter += 3;
+            maxSimilarityValue += 3;
+        } else {
+            //EnclosingMethodType from either query is null
+            maxSimilarityValue +=3;  // account for missing comparing parameterSimilarity +1, parameterLength +1, getEnclosingMethodSignatureFullyQualifiedReturnType +1
         }
 
 
