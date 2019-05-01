@@ -42,7 +42,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
             double totalFrequency = 0;
             List<Pair<QuerySelection,Double>> filteredSelections = new ArrayList<>();
             for (QuerySelection querySelection : querySelections) {
-                result.add(new ImmutablePair<>(querySelection.getSelection(), Similarity.calculateSimilarity(querySelection.getQuery(), query)));
+                result.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
             }
 
 

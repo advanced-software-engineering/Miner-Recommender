@@ -18,7 +18,7 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
+        double similarity = new Similarity(q1,q2).calculate();
         Assertions.assertEquals(1, similarity);
     }
 
@@ -28,9 +28,9 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.LOOP, ObjectOrigin.LOCAL, "System.String", null);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
-        // 5 out of 6 things are similar, should return, (mapped to a range of 0 to 1), the value 0.83333333 -> rounded 0.83
-        Assertions.assertEquals(0.83, similarity);
+        double similarity = new Similarity(q1,q2).calculate();
+        // 4 out of 5 things are similar, should return, (mapped to a range of 0 to 1), the value 0.8
+        Assertions.assertEquals(0.8, similarity);
     }
 
     @Test
@@ -38,9 +38,9 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "SomethingElse", SurroundingExpression.LOOP, ObjectOrigin.LOCAL, "System.String", null);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
-        // 4 out of 6 things are similar, should return, (mapped to a range of 0 to 1), the value 0.666666 -> rounded 0.67
-        Assertions.assertEquals(0.67, similarity);
+        double similarity = new Similarity(q1,q2).calculate();
+        // 4 out of 5 things are similar, should return, (mapped to a range of 0 to 1), the value 0.6
+        Assertions.assertEquals(0.6, similarity);
     }
 
 
@@ -60,7 +60,7 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature1);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature2);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
+        double similarity = new Similarity(q1,q2).calculate();
         // EncosingMethodSignature has the same amount of params in q1 and q2
         Assertions.assertEquals(1, similarity);
     }
@@ -81,9 +81,9 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature1);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature2);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
-        // EncosingMethodSignature m2 has one parameter more, 10 out of 11 things are the same, the value 0.9090909090909091 is rounded to 0.91
-        Assertions.assertEquals(0.91, similarity);
+        double similarity = new Similarity(q1,q2).calculate();
+        // EncosingMethodSignature m2 has one parameter more, 9 out of 10 things are the same, the value 0.9
+        Assertions.assertEquals(0.9, similarity);
     }
 
     @Test
@@ -104,31 +104,31 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature1);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature2);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
-        double similarityTransitive = Similarity.calculateSimilarity(q2,q1);
-        // EncosingMethodSignature m2 has one parameter more, 9 out of 11 things are the same, the value 0.8181818181818182 is rounded to 0.82
-        Assertions.assertEquals(0.82, similarity);
+        double similarity = new Similarity(q1,q2).calculate();
+        double similarityTransitive = new Similarity(q2,q1).calculate();
+        // EncosingMethodSignature m2 has one parameter more, 8 out of 10 things are the same, the value 0.8
+        Assertions.assertEquals(0.8, similarity);
         //order of comparison should not matter!
-        Assertions.assertTrue(similarity == similarityTransitive);
+        Assertions.assertEquals(similarity, similarityTransitive);
     }
 
     @Test
     public void testSimilarity7(){
-       Query q1 = new Query(null,null,null,null,null,null);
-        Query q2 = new Query(null,null,null,null,null,null);
+       Query q1 = new Query(ResultType.METHOD_INVOCATION,null,null,null,null,null);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION,null,null,null,null,null);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
+        double similarity = new Similarity(q1,q2).calculate();
         Assertions.assertEquals(1, similarity);
     }
 
     @Test
     public void testSimilarity8(){
         Query q1 = new Query(null,null,SurroundingExpression.LOOP,null,null,null);
-        Query q2 = new Query(null,null,null,null,null,null);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION,null,null,null,null,null);
 
-        double similarity = Similarity.calculateSimilarity(q1,q2);
-        // 5 out of 6 are similar
-        Assertions.assertEquals(0.83, similarity);
+        double similarity = new Similarity(q1,q2).calculate();
+        // not same result type
+        Assertions.assertEquals(0.0, similarity);
     }
 
 
@@ -139,11 +139,11 @@ public class SimilarityTest {
         Query q2 = null;
         EnclosingMethodSignature enclosingMethodSignature = mock(EnclosingMethodSignature.class);
         Query q3 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature);
-        double similarity = Similarity.calculateSimilarity(q1,q2);
+        double similarity = new Similarity(q1,q2).calculate();
         Assertions.assertEquals(1, similarity);
-        double similarity2 = Similarity.calculateSimilarity(q1,q3);
+        double similarity2 = new Similarity(q1,q3).calculate();
         Assertions.assertEquals(0, similarity2);
-        double similarity3 = Similarity.calculateSimilarity(q3,q1);
+        double similarity3 = new Similarity(q3,q1).calculate();
         Assertions.assertEquals(0, similarity3);
     }
 }

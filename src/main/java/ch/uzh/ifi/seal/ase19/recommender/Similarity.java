@@ -1,64 +1,37 @@
 package ch.uzh.ifi.seal.ase19.recommender;
 
-import ch.uzh.ifi.seal.ase19.core.models.MethodParameter;
-import ch.uzh.ifi.seal.ase19.core.models.Query;
+import ch.uzh.ifi.seal.ase19.core.models.*;
 
 public class Similarity {
 
-    public static double calculateSimilarity(Query q1, Query q2) {
-        int similarityCounter = 0;
-        int maxSimilarityValue = 0;
+    private Query q1;
+    private Query q2;
 
+    private int similarityCounter = 0;
+    private int maxSimilarityValue = 0;
+
+    public Similarity(Query q1, Query q2) {
+        this.q1 = q1;
+        this.q2 = q2;
+    }
+
+    public double calculate() {
         if (q1 == null && q2 == null) {
             return 1.0;
         } else if (q1 == null || q2 == null) {
             return 0.0;
         }
 
-        if (q1.getResultType() != null && q2.getResultType() != null) {
-            if (q1.getResultType().equals(q2.getResultType()))
-                similarityCounter += 1;
-        } else if (q1.getResultType() == null && q2.getResultType() == null) {
-            similarityCounter += 1;
+        ResultType rt1 = q1.getResultType();
+        ResultType rt2 = q2.getResultType();
+        if(rt1 == null || !rt1.equals(rt2)){
+            return 0.0;
         }
-        maxSimilarityValue += 1;
 
-        if (q1.getReceiverType() != null && q2.getReceiverType() != null) {
-            if (q1.getReceiverType().equals(q2.getReceiverType()))
-                similarityCounter += 1;
-
-        } else if (q1.getReceiverType() == null && q2.getReceiverType() == null) {
-            similarityCounter += 1;
-        }
-        maxSimilarityValue += 1;
-
-        if (q1.getRequiredType() != null && q2.getRequiredType() != null) {
-            if (q1.getRequiredType().equals(q2.getRequiredType()))
-                similarityCounter += 1;
-
-        } else if (q1.getRequiredType() == null && q2.getRequiredType() == null) {
-            similarityCounter += 1;
-        }
-        maxSimilarityValue += 1;
-
-        if (q1.getObjectOrigin() != null && q2.getObjectOrigin() != null) {
-            if (q1.getObjectOrigin().equals(q2.getObjectOrigin()))
-                similarityCounter += 1;
-
-        } else if (q1.getObjectOrigin() == null && q2.getObjectOrigin() == null) {
-            similarityCounter += 1;
-        }
-        maxSimilarityValue += 1;
-
-
-        if (q1.getSurroundingType() != null && q2.getSurroundingType() != null) {
-            if (q1.getSurroundingType().equals(q2.getSurroundingType()))
-                similarityCounter += 1;
-
-        } else if (q1.getSurroundingType() == null && q2.getSurroundingType() == null) {
-            similarityCounter += 1;
-        }
-        maxSimilarityValue += 1;
+        calcReceiverType();
+        calcRequiredType();
+        calcObjectOrigin();
+        calcSurroundingType();
 
         if (q1.getEnclosingMethodSignature() != null && q2.getEnclosingMethodSignature() != null) {
             if (q1.getEnclosingMethodSignature().getFullyQualifiedReturnType() != null && q1.getEnclosingMethodSignature().getFullyQualifiedReturnType() != null) {
@@ -101,10 +74,7 @@ public class Similarity {
                         } else if (param1.getType() == null && param2.getType() == null) {
                             similarityCounter += 1;
                         }
-
-
                     }
-
                 }
             }
         } else if (q1.getEnclosingMethodSignature() == null && q2.getEnclosingMethodSignature() == null) {
@@ -121,5 +91,47 @@ public class Similarity {
          */
         double similarity = (1.0 - 0.0) / (maxSimilarityValue - 0.0) * (similarityCounter - maxSimilarityValue) + 1.0;
         return Math.round((similarity * 100)) / 100.00;
+    }
+
+    private void calcReceiverType() {
+        String rt1 = q1.getReceiverType();
+        String rt2 = q2.getReceiverType();
+
+        similarityCounter += equalsToSimilarity(rt1, rt2);
+        maxSimilarityValue += 1;
+    }
+
+    private void calcRequiredType() {
+        String rt1 = q1.getRequiredType();
+        String rt2 = q2.getRequiredType();
+
+        similarityCounter += equalsToSimilarity(rt1, rt2);
+        maxSimilarityValue += 1;
+    }
+
+    private void calcObjectOrigin() {
+        ObjectOrigin oo1 = q1.getObjectOrigin();
+        ObjectOrigin oo2 = q2.getObjectOrigin();
+
+        similarityCounter += equalsToSimilarity(oo1, oo2);
+        maxSimilarityValue += 1;
+    }
+
+    private void calcSurroundingType() {
+        SurroundingExpression se1 = q1.getSurroundingType();
+        SurroundingExpression se2 = q2.getSurroundingType();
+
+        similarityCounter += equalsToSimilarity(se1, se2);
+        maxSimilarityValue += 1;
+    }
+
+    private double equalsToSimilarity(Object o1, Object o2) {
+        if(o1 == null && o2 == null){
+            return 1.0;
+        }else if(o1 == null){
+            return 0.0;
+        }else{
+            return o1.equals(o2) ? 1.0 : 0.0;
+        }
     }
 }
