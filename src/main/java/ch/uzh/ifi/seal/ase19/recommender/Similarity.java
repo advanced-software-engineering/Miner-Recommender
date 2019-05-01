@@ -31,7 +31,7 @@ public class Similarity {
         calcReceiverType();
         calcRequiredType();
         calcObjectOrigin();
-        calcSurroundingType();
+        calcSurroundingExpression();
 
         if (q1.getEnclosingMethodSignature() != null && q2.getEnclosingMethodSignature() != null) {
             if (q1.getEnclosingMethodSignature().getFullyQualifiedReturnType() != null && q1.getEnclosingMethodSignature().getFullyQualifiedReturnType() != null) {
@@ -117,9 +117,9 @@ public class Similarity {
         maxSimilarityValue += 1;
     }
 
-    private void calcSurroundingType() {
-        SurroundingExpression se1 = q1.getSurroundingType();
-        SurroundingExpression se2 = q2.getSurroundingType();
+    private void calcSurroundingExpression() {
+        SurroundingExpression se1 = q1.getSurroundingExpression();
+        SurroundingExpression se2 = q2.getSurroundingExpression();
 
         similarityCounter += equalsToSimilarity(se1, se2);
         maxSimilarityValue += 1;

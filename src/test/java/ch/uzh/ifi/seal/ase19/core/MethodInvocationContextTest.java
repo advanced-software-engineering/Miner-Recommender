@@ -13,7 +13,7 @@ class MethodInvocationContextTest {
     void defensiveCopy() {
         MethodInvocationContext sut = new MethodInvocationContext();
         MethodInvocationContext c1 = sut.setMethodDeclaration(mock(IMethodDeclaration.class));
-        MethodInvocationContext c2 = sut.setSurroundingType(SurroundingExpression.RETURN_STATEMENT);
+        MethodInvocationContext c2 = sut.setSurroundingExpression(SurroundingExpression.RETURN_STATEMENT);
         MethodInvocationContext c3 = sut.setMethodInvocation(mock(IInvocationExpression.class));
 
         Assertions.assertNotEquals(sut, c1);

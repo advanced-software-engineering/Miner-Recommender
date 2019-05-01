@@ -28,7 +28,7 @@ class ConvertManager {
         IMethodName method = methodInvocation.getMethodName();
         String receiverType = SSTUtils.getFullyQualifiedNameWithoutGenerics(method.getDeclaringType().getFullName());
         String requiredType = SSTUtils.getFullyQualifiedNameWithoutGenerics(method.getReturnType().getFullName());
-        SurroundingExpression surroundingType = methodInvocationContext.getSurroundingType();
+        SurroundingExpression surroundingExpression = methodInvocationContext.getSurroundingExpression();
 
         EnclosingMethodSignature enclosingMethodSignature = null;
         if (methodInvocationContext.getMethodDeclaration() != null) {
@@ -45,7 +45,7 @@ class ConvertManager {
             objectOrigin = getObjectOrigin(referenceIdentifier, enclosingMethodSignature);
         }
 
-        Query query = new Query(ResultType.METHOD_INVOCATION, receiverType, surroundingType, objectOrigin, requiredType, enclosingMethodSignature);
+        Query query = new Query(ResultType.METHOD_INVOCATION, receiverType, surroundingExpression, objectOrigin, requiredType, enclosingMethodSignature);
         return new QuerySelection(query, method);
     }
 

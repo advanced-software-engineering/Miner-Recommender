@@ -5,15 +5,15 @@ import java.util.Objects;
 public class Query {
     private ResultType resultType;
     private String receiverType;
-    private SurroundingExpression surroundingType;
+    private SurroundingExpression surroundingExpression;
     private ObjectOrigin objectOrigin;
     private String requiredType;
     private EnclosingMethodSignature enclosingMethodSignature;
 
-    public Query(ResultType resultType, String receiverType, SurroundingExpression surroundingType, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
+    public Query(ResultType resultType, String receiverType, SurroundingExpression surroundingExpression, ObjectOrigin objectOrigin, String requiredType, EnclosingMethodSignature enclosingMethodSignature) {
         this.resultType = resultType;
         this.receiverType = receiverType;
-        this.surroundingType = surroundingType;
+        this.surroundingExpression = surroundingExpression;
         this.objectOrigin = objectOrigin;
         this.requiredType = requiredType;
         this.enclosingMethodSignature = enclosingMethodSignature;
@@ -27,8 +27,8 @@ public class Query {
         return receiverType;
     }
 
-    public SurroundingExpression getSurroundingType() {
-        return surroundingType;
+    public SurroundingExpression getSurroundingExpression() {
+        return surroundingExpression;
     }
 
     public ObjectOrigin getObjectOrigin() {
@@ -49,7 +49,7 @@ public class Query {
         if (o == null || getClass() != o.getClass()) return false;
         Query query = (Query) o;
         return Objects.equals(receiverType, query.receiverType) &&
-                surroundingType == query.surroundingType &&
+                surroundingExpression == query.surroundingExpression &&
                 objectOrigin == query.objectOrigin &&
                 Objects.equals(requiredType, query.requiredType) &&
                 Objects.equals(enclosingMethodSignature, query.enclosingMethodSignature);
@@ -60,7 +60,7 @@ public class Query {
         return "Query{" +
                 "resultType=" + resultType +
                 ", receiverType='" + receiverType + '\'' +
-                ", surroundingType=" + surroundingType +
+                ", surroundingExpression=" + surroundingExpression +
                 ", objectOrigin=" + objectOrigin +
                 ", requiredType='" + requiredType + '\'' +
                 ", enclosingMethodSignature=" + enclosingMethodSignature +
@@ -69,6 +69,6 @@ public class Query {
 
     @Override
     public int hashCode() {
-        return Objects.hash(resultType, receiverType, surroundingType, objectOrigin, requiredType, enclosingMethodSignature);
+        return Objects.hash(resultType, receiverType, surroundingExpression, objectOrigin, requiredType, enclosingMethodSignature);
     }
 }

@@ -23,32 +23,32 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
 
     @Override
     public Void visit(IIfElseBlock block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.BRANCHING_CONDITION));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.BRANCHING_CONDITION));
     }
 
     @Override
     public Void visit(IForLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(IForEachLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(IWhileLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(IDoLoop block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.LOOP));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.LOOP));
     }
 
     @Override
     public Void visit(ISwitchBlock block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.BRANCHING_CONDITION));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.BRANCHING_CONDITION));
     }
 
     @Override
@@ -60,22 +60,22 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
 
     @Override
     public Void visit(IAssignment stmt, MethodInvocationContext context) {
-        return super.visit(stmt, context.setSurroundingType(SurroundingExpression.ASSIGNMENT));
+        return super.visit(stmt, context.setSurroundingExpression(SurroundingExpression.ASSIGNMENT));
     }
 
     @Override
     public Void visit(IReturnStatement stmt, MethodInvocationContext context) {
-        return super.visit(stmt, context.setSurroundingType(SurroundingExpression.RETURN_STATEMENT));
+        return super.visit(stmt, context.setSurroundingExpression(SurroundingExpression.RETURN_STATEMENT));
     }
 
     @Override
     public Void visit(ILambdaExpression expr, MethodInvocationContext context) {
-        return super.visit(expr, context.setSurroundingType(SurroundingExpression.LAMBDA));
+        return super.visit(expr, context.setSurroundingExpression(SurroundingExpression.LAMBDA));
     }
 
     @Override
     public Void visit(ITryBlock block, MethodInvocationContext context) {
-        return super.visit(block, context.setSurroundingType(SurroundingExpression.TRY));
+        return super.visit(block, context.setSurroundingExpression(SurroundingExpression.TRY));
     }
 
     List<MethodInvocationContext> getFound() {

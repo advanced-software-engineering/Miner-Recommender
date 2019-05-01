@@ -6,20 +6,20 @@ import ch.uzh.ifi.seal.ase19.core.models.SurroundingExpression;
 
 public class MethodInvocationContext {
     private IMethodDeclaration methodDeclaration;
-    private SurroundingExpression surroundingType;
+    private SurroundingExpression surroundingExpression;
     private IInvocationExpression methodInvocation;
 
     public MethodInvocationContext() {
     }
 
-    private MethodInvocationContext(IMethodDeclaration methodDeclaration, SurroundingExpression surroundingType, IInvocationExpression methodInvocation) {
+    private MethodInvocationContext(IMethodDeclaration methodDeclaration, SurroundingExpression surroundingExpression, IInvocationExpression methodInvocation) {
         this.methodDeclaration = methodDeclaration;
-        this.surroundingType = surroundingType;
+        this.surroundingExpression = surroundingExpression;
         this.methodInvocation = methodInvocation;
     }
 
     private MethodInvocationContext getCopy() {
-        return new MethodInvocationContext(methodDeclaration, surroundingType, methodInvocation);
+        return new MethodInvocationContext(methodDeclaration, surroundingExpression, methodInvocation);
     }
 
     public IMethodDeclaration getMethodDeclaration() {
@@ -29,17 +29,17 @@ public class MethodInvocationContext {
     public MethodInvocationContext setMethodDeclaration(IMethodDeclaration methodDeclaration) {
         MethodInvocationContext copy = getCopy();
         copy.methodDeclaration = methodDeclaration;
-        copy.surroundingType = SurroundingExpression.METHOD_BODY;
+        copy.surroundingExpression = SurroundingExpression.METHOD_BODY;
         return copy;
     }
 
-    public SurroundingExpression getSurroundingType() {
-        return surroundingType;
+    public SurroundingExpression getSurroundingExpression() {
+        return surroundingExpression;
     }
 
-    public MethodInvocationContext setSurroundingType(SurroundingExpression surroundingType) {
+    public MethodInvocationContext setSurroundingExpression(SurroundingExpression surroundingExpression) {
         MethodInvocationContext copy = getCopy();
-        copy.surroundingType = surroundingType;
+        copy.surroundingExpression = surroundingExpression;
         return copy;
     }
 

@@ -47,7 +47,7 @@ class ConvertManagerTest {
 
         MethodInvocationContext mic = new MethodInvocationContext();
         mic = mic.setMethodDeclaration(md);
-        mic = mic.setSurroundingType(SurroundingExpression.ASSIGNMENT);
+        mic = mic.setSurroundingExpression(SurroundingExpression.ASSIGNMENT);
         mic = mic.setMethodInvocation(mi);
         Set<IMemberHierarchy<IMethodName>> mh = new HashSet<>();
         Set<IFieldName> f = new HashSet<>();
