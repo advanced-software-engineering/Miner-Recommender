@@ -26,10 +26,6 @@ public class EnclosingMethodSignature {
         }
     }
 
-    public String getMethodName() {
-        return methodName;
-    }
-
     public String getFullyQualifiedReturnType() {
         return fullyQualifiedReturnType;
     }
