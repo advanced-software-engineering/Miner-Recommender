@@ -40,20 +40,12 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
             ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
             List<QuerySelection> querySelections = rtq.getItems();
             double totalFrequency = 0;
-            List<QuerySelection> filteredSelections = new ArrayList<>();
+            List<Pair<QuerySelection,Double>> filteredSelections = new ArrayList<>();
             for (QuerySelection querySelection : querySelections) {
-                if (querySelection.getQuery().equals(query)) {
-                    filteredSelections.add(querySelection);
-                    totalFrequency += querySelection.getFrequency();
-                }
+                result.add(new ImmutablePair<>(querySelection.getSelection(), Similarity.calculateSimilarity(querySelection.getQuery(), query)));
             }
 
-            for (QuerySelection querySelection : filteredSelections
-            ) {
 
-                result.add(new ImmutablePair<IMemberName, Double>(querySelection.getSelection(), (double) Math.round((querySelection.getFrequency() / totalFrequency) * 100) / 100.00));
-
-            }
 
             return result;
 
