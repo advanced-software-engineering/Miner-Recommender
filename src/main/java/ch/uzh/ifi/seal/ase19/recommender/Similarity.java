@@ -15,7 +15,7 @@ public class Similarity {
             return 0.0;
         }
 
-        if (q1.getResultType() != null && q1.getResultType() != null) {
+        if (q1.getResultType() != null && q2.getResultType() != null) {
             if (q1.getResultType().equals(q2.getResultType()))
                 similarityCounter += 1;
         } else if (q1.getResultType() == null && q2.getResultType() == null) {
