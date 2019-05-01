@@ -37,9 +37,7 @@ public class ExampleRecommender {
         System.out.printf("%-30s%-30s\n", "Method name", "Similarity measure");
         System.out.printf("%-30s%-30s\n", "------------", "--------------------");
         result.forEach(p -> {
-            IMemberName iMemberName = p.getLeft();
-            double similarity = p.getRight();
-            System.out.printf("%-30s%-30s\n", iMemberName.getName(), similarity);
+            System.out.printf("%-30s%-30s\n",p.getLeft().getName(),p.getRight());
         });
     }
 }
