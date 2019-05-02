@@ -11,7 +11,10 @@ import ch.uzh.ifi.seal.ase19.miner.ContextProcessor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     private ContextProcessor processor;
@@ -24,36 +27,20 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
     @Override
     public Set<Pair<IMemberName, Double>> query(Query query) {
-        try {
-            TreeSet<Pair<IMemberName, Double>> result = new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
-                @Override
-                public int compare(Pair<IMemberName, Double> o1, Pair<IMemberName, Double> o2) {
-                    if (o1.getRight() < o2.getRight()) {
-                        return 1;
-                    } else if (o1.getRight() > o2.getRight()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                }
-            });
-            ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
-            List<QuerySelection> querySelections = rtq.getItems();
-            double totalFrequency = 0;
-            List<Pair<QuerySelection,Double>> filteredSelections = new ArrayList<>();
-            for (QuerySelection querySelection : querySelections) {
-                result.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
+        TreeSet<Pair<IMemberName, Double>> result = new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
+            @Override
+            public int compare(Pair<IMemberName, Double> o1, Pair<IMemberName, Double> o2) {
+                return -1 * o1.getRight().compareTo(o2.getRight());
             }
+        });
 
-
-
-            return result;
-
-
-        } catch (RuntimeException e) {
-            System.out.println(e);
-            return null;
+        ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
+        for (QuerySelection querySelection : rtq.getItems()) {
+            double a = new Similarity(querySelection.getQuery(), query).calculate();
+            result.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
         }
+
+        return result;
     }
 
     @Override
