@@ -11,10 +11,7 @@ import ch.uzh.ifi.seal.ase19.miner.ContextProcessor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     private ContextProcessor processor;
@@ -27,7 +24,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
     @Override
     public Set<Pair<IMemberName, Double>> query(Query query) {
-        TreeSet<Pair<IMemberName, Double>> result = new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
+        TreeSet<Pair<IMemberName, Double>> recommendations = new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
             @Override
             public int compare(Pair<IMemberName, Double> o1, Pair<IMemberName, Double> o2) {
                 return -1 * o1.getRight().compareTo(o2.getRight());
@@ -36,10 +33,39 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
         ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
         for (QuerySelection querySelection : rtq.getItems()) {
-            result.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
+            recommendations.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
         }
 
-        return result;
+        Map<String, Pair<IMemberName,Double>>  map = new HashMap<>();
+
+        /*
+            if
+            multiple recommendations have the same
+            name but different similarities,
+            only the include the pair with the,
+            highest similarity .
+
+         */
+        for (Pair<IMemberName,Double> pair: recommendations
+             ) {
+
+            if (map.get(pair.getLeft().getFullName()) == null){
+                map.put(pair.getLeft().getFullName(), pair);
+
+            } else {
+                // update the map to have the pair with the higher similarity in it
+                if (map.get(pair.getLeft().getFullName()).getRight() < pair.getRight()){
+                   map.put(pair.getLeft().getFullName(), pair);
+                }
+            }
+
+        }
+
+        //clear the recommendations which may have duplicates method names
+        recommendations.clear();
+        recommendations.addAll(map.values());
+
+        return recommendations;
     }
 
     @Override
