@@ -4,6 +4,14 @@ import ch.uzh.ifi.seal.ase19.core.models.*;
 
 public class Similarity {
 
+    private final static double WEIGHT_RECEIVER_TYPE = 1.0;
+    private final static double WEIGHT_REQUIRED_TYPE = 1.0;
+    private final static double WEIGHT_OBJECT_ORIGIN = 1.0;
+    private final static double WEIGHT_SURROUNDING_EXPRESSION = 1.0;
+    private final static double WEIGHT_ENCLOSING_METHOD_RETURN_TYPE_EXPRESSION = 1.0;
+    private final static double WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE_EXPRESSION = 1.0;
+    private final static double WEIGHT_ENCLOSING_METHOD_PARAMETER_EXPRESSION = 1.0;
+
     private Query q1;
     private Query q2;
 
@@ -41,48 +49,48 @@ public class Similarity {
             String fqrt2 = ems2.getFullyQualifiedReturnType();
             if (fqrt1 == null && fqrt2 == null) {
                 similarityCounter += 1;
-            } else if (fqrt1 != null) {
-                if (fqrt1.equals(fqrt2))
-                    similarityCounter += 1;
+            } else if (fqrt1 != null && fqrt1.equals(fqrt2)) {
+                similarityCounter += 1;
             }
-            maxSimilarityValue += 1;
 
             if (ems1.getParameters() != null && ems2.getParameters() != null) {
-                if (ems1.getParameters().size() == ems2.getParameters().size())
+                if (ems1.getParameters().size() == ems2.getParameters().size()) {
                     similarityCounter += 1;
-                maxSimilarityValue += 1;
+                }
 
                 //increase the maxPossible similarity by at most one, thus divide similarity increase by longer parameter list times two because foreach
                 // parameter name and type can be compared
-                // TODO are 0.5 and 1.5 weights?
                 int parameterLength = Math.max(ems1.getParameters().size(), ems2.getParameters().size());
+                int countSameParameterName = 0;
+                int countSameParameterType = 0;
                 for (MethodParameter param1 : ems1.getParameters()) {
                     for (MethodParameter param2 : ems2.getParameters()) {
                         if (param1.getName() == null && param2.getName() == null) {
-                            similarityCounter += (1.0 / (parameterLength * 2)) * 0.5;
+                            countSameParameterName++;
                         } else if (param1.getName() != null && param1.getName().equals(param2.getName())) {
-                            similarityCounter += (1.0 / (parameterLength * 2)) * 0.5;
+                            countSameParameterName++;
                         }
 
                         if (param1.getType() == null && param2.getType() == null) {
-                            similarityCounter += (1.0 / (parameterLength * 2)) * 1.5;
+                            countSameParameterType++;
                         } else if (param1.getType() != null && param1.getType().equals(param2.getType())) {
-                            similarityCounter += (1.0 / (parameterLength * 2)) * 1.5;
+                            countSameParameterType++;
                         }
                     }
                 }
-                maxSimilarityValue += 1;
+
+                if (parameterLength > 0) {
+                    similarityCounter += countSameParameterName / parameterLength * 0.25 + countSameParameterType / parameterLength * 0.75;
+                } else {
+                    similarityCounter += 1;
+                }
             }
         } else if (ems1 == null && ems2 == null) {
-            //EnclosingMethodType from q1 and q2 are null so parameterSimilarity +1, parameterLength +1, getEnclosingMethodSignatureFullyQualifiedReturnType +1
-            // can be seen as the same too, account for that
-            similarityCounter += 3;
-            maxSimilarityValue += 3;
-        } else {
-            //EnclosingMethodType from either query is null
-            // TODO why? one of both is null
-            maxSimilarityValue += 3;  // account for missing comparing parameterSimilarity +1, parameterLength +1, getEnclosingMethodSignatureFullyQualifiedReturnType +1
+            //EnclosingMethodType from q1 and q2 are null so they are same
+            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE_EXPRESSION + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE_EXPRESSION + WEIGHT_ENCLOSING_METHOD_PARAMETER_EXPRESSION;
         }
+
+        maxSimilarityValue += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE_EXPRESSION + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE_EXPRESSION + WEIGHT_ENCLOSING_METHOD_PARAMETER_EXPRESSION;
 
         return similarityCounter / maxSimilarityValue;
     }
@@ -91,32 +99,32 @@ public class Similarity {
         String rt1 = q1.getReceiverType();
         String rt2 = q2.getReceiverType();
 
-        similarityCounter += equalsToSimilarity(rt1, rt2);
-        maxSimilarityValue += 1;
+        similarityCounter += WEIGHT_RECEIVER_TYPE * equalsToSimilarity(rt1, rt2);
+        maxSimilarityValue += WEIGHT_RECEIVER_TYPE;
     }
 
     private void calcRequiredType() {
         String rt1 = q1.getRequiredType();
         String rt2 = q2.getRequiredType();
 
-        similarityCounter += equalsToSimilarity(rt1, rt2);
-        maxSimilarityValue += 1;
+        similarityCounter += WEIGHT_REQUIRED_TYPE * equalsToSimilarity(rt1, rt2);
+        maxSimilarityValue += WEIGHT_REQUIRED_TYPE;
     }
 
     private void calcObjectOrigin() {
         ObjectOrigin oo1 = q1.getObjectOrigin();
         ObjectOrigin oo2 = q2.getObjectOrigin();
 
-        similarityCounter += equalsToSimilarity(oo1, oo2);
-        maxSimilarityValue += 1;
+        similarityCounter += WEIGHT_OBJECT_ORIGIN * equalsToSimilarity(oo1, oo2);
+        maxSimilarityValue += WEIGHT_OBJECT_ORIGIN;
     }
 
     private void calcSurroundingExpression() {
         SurroundingExpression se1 = q1.getSurroundingExpression();
         SurroundingExpression se2 = q2.getSurroundingExpression();
 
-        similarityCounter += equalsToSimilarity(se1, se2);
-        maxSimilarityValue += 1;
+        similarityCounter += WEIGHT_SURROUNDING_EXPRESSION * equalsToSimilarity(se1, se2);
+        maxSimilarityValue += WEIGHT_SURROUNDING_EXPRESSION;
     }
 
     private double equalsToSimilarity(Object o1, Object o2) {
