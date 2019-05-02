@@ -84,16 +84,7 @@ public class Similarity {
             maxSimilarityValue += 3;  // account for missing comparing parameterSimilarity +1, parameterLength +1, getEnclosingMethodSignatureFullyQualifiedReturnType +1
         }
 
-        // newvalue= (max'-min')/(max-min)*(value-max)+max' normalize between 0 and 1
-        /*
-        JavaScript to quickly calculate in browser
-        const scale = (num, in_min, in_max, out_min, out_max) => {
-              return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-            }
-         */
-        // TODO why not similarityCounter / maxSimilarityValue?
-        double similarity = (1.0 - 0.0) / (maxSimilarityValue - 0.0) * (similarityCounter - maxSimilarityValue) + 1.0;
-        return similarity;
+        return similarityCounter / maxSimilarityValue;
     }
 
     private void calcReceiverType() {
