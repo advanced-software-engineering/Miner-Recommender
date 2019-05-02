@@ -36,7 +36,6 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
         ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
         for (QuerySelection querySelection : rtq.getItems()) {
-            double a = new Similarity(querySelection.getQuery(), query).calculate();
             result.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
         }
 
