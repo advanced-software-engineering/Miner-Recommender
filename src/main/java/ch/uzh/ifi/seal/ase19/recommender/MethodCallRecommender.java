@@ -55,8 +55,11 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
             }
         }
 
-        lastModelSize = map.values().size();
-        return new HashSet<>(map.values());
+        //clear the recommendations which may have duplicates method names
+        recommendations.clear();
+        recommendations.addAll(map.values());
+
+        return recommendations;
     }
 
     @Override
