@@ -122,7 +122,6 @@ public class SimilarityTest {
             + 0.125 for same parameter name
             + 0.75 for same parameter type
          */
-        // Everyting is the same except ParameterListLength 8-1 = 7,
         // all params are the same except one has different name --> (1/paramListLenght*2) * weight = (1/2*2) * 0.5 = 0.125
         // 7 - 1 - 0.125 = 5.875 (-1 for parameter length)
         Assertions.assertEquals(0.83, similarity, 0.01);
@@ -190,4 +189,18 @@ public class SimilarityTest {
         Assertions.assertTrue(similarity < similarity1);
 
     }
+
+    @Test
+    public void similarityTest11(){
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
+        EnclosingMethodSignature ems1 = mock(EnclosingMethodSignature.class);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", ems1);
+
+        double similarity = new Similarity(q1,q2).calculate();
+        //ems1 is not null but all its members are, should this test really fail?
+        // Should we expect the similarity to be 1?
+        Assertions.assertEquals(1, similarity);
+    }
+    
+
 }
