@@ -136,8 +136,8 @@ public class Similarity {
         }
 
         if (parameterLength > 0) {
-            double similarityParameterNames = countSameParameterName / parameterLength * SUBWEIGHT_PARAMETER_NAME;
-            double similarityParameterTypes = countSameParameterType / parameterLength * SUBWEIGHT_PARAMETER_TYPE;
+            double similarityParameterNames = SUBWEIGHT_PARAMETER_NAME * countSameParameterName / parameterLength;
+            double similarityParameterTypes = SUBWEIGHT_PARAMETER_TYPE * countSameParameterType / parameterLength;
             double totalSubWeights = SUBWEIGHT_PARAMETER_NAME + SUBWEIGHT_PARAMETER_TYPE;
             similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER * (similarityParameterNames + similarityParameterTypes) / totalSubWeights;
         } else {
