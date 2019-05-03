@@ -17,6 +17,8 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     private ContextProcessor processor;
     private IPersistenceManager pm;
 
+    private int lastModelSize = 0;
+
     public MethodCallRecommender(ContextProcessor processor, IPersistenceManager pm) {
         this.processor = processor;
         this.pm = pm;
@@ -36,36 +38,25 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
             recommendations.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
         }
 
-        Map<String, Pair<IMemberName,Double>>  map = new HashMap<>();
+        Map<String, Pair<IMemberName, Double>> map = new HashMap<>();
 
         /*
-            if
-            multiple recommendations have the same
-            name but different similarities,
-            only the include the pair with the,
-            highest similarity .
-
+            if multiple recommendations have the same name but different similarities, only the include the pair with the, highest similarity.
          */
-        for (Pair<IMemberName,Double> pair: recommendations
-             ) {
-
-            if (map.get(pair.getLeft().getFullName()) == null){
-                map.put(pair.getLeft().getFullName(), pair);
-
+        for (Pair<IMemberName, Double> pair : recommendations) {
+            String fullName = pair.getLeft().getFullName();
+            if (map.get(fullName) == null) {
+                map.put(fullName, pair);
             } else {
                 // update the map to have the pair with the higher similarity in it
-                if (map.get(pair.getLeft().getFullName()).getRight() < pair.getRight()){
-                   map.put(pair.getLeft().getFullName(), pair);
+                if (map.get(fullName).getRight() < pair.getRight()) {
+                    map.put(fullName, pair);
                 }
             }
-
         }
 
-        //clear the recommendations which may have duplicates method names
-        recommendations.clear();
-        recommendations.addAll(map.values());
-
-        return recommendations;
+        lastModelSize = map.values().size();
+        return new HashSet<>(map.values());
     }
 
     @Override
@@ -81,7 +72,6 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
     @Override
     public int getLastModelSize() {
-        // TODO
-        throw new UnsupportedOperationException("Last model size cannot be returned");
+        return lastModelSize;
     }
 }
