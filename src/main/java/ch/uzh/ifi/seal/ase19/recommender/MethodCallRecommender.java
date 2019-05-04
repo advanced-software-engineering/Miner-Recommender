@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     private ContextProcessor processor;
@@ -25,31 +26,44 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     }
 
     @Override
-    public Set<Pair<IMemberName, Double>> query(Query query) {
-        TreeSet<Pair<IMemberName, Double>> recommendations = new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
+    public TreeSet<Pair<IMemberName, Double>> query(Query query) {
+        Set<Pair<IMemberName, SimilarityDto>> res = queryWithDetails(query);
+        return res.parallelStream().map(it -> Pair.of(it.getLeft(), it.getRight().getSimilarity())).collect(
+                Collectors.toCollection(() -> new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
+                    @Override
+                    public int compare(Pair<IMemberName, Double> o1, Pair<IMemberName, Double> o2) {
+                        return -1 * o1.getRight().compareTo(o2.getRight());
+                    }
+                }))
+        );
+    }
+
+    public Set<Pair<IMemberName, SimilarityDto>> queryWithDetails(Query query) {
+        TreeSet<Pair<IMemberName, SimilarityDto>> recommendations = new TreeSet<>(new Comparator<Pair<IMemberName, SimilarityDto>>() {
             @Override
-            public int compare(Pair<IMemberName, Double> o1, Pair<IMemberName, Double> o2) {
-                return -1 * o1.getRight().compareTo(o2.getRight());
+            public int compare(Pair<IMemberName, SimilarityDto> o1, Pair<IMemberName, SimilarityDto> o2) {
+                return -1 * o1.getRight().getSimilarity().compareTo(o2.getRight().getSimilarity());
             }
         });
 
         ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
         for (QuerySelection querySelection : rtq.getItems()) {
-            recommendations.add(new ImmutablePair<>(querySelection.getSelection(), new Similarity(querySelection.getQuery(), query).calculate()));
+            Similarity similarity = new Similarity(querySelection.getQuery(), query);
+            recommendations.add(new ImmutablePair<>(querySelection.getSelection(), similarity.calculateWithDetails()));
         }
 
-        Map<String, Pair<IMemberName, Double>> map = new HashMap<>();
+        Map<String, Pair<IMemberName, SimilarityDto>> map = new HashMap<>();
 
         /*
             if multiple recommendations have the same name but different similarities, only the include the pair with the, highest similarity.
          */
-        for (Pair<IMemberName, Double> pair : recommendations) {
+        for (Pair<IMemberName, SimilarityDto> pair : recommendations) {
             String fullName = pair.getLeft().getFullName();
             if (map.get(fullName) == null) {
                 map.put(fullName, pair);
             } else {
                 // update the map to have the pair with the higher similarity in it
-                if (map.get(fullName).getRight() < pair.getRight()) {
+                if (map.get(fullName).getRight().getSimilarity() < pair.getRight().getSimilarity()) {
                     map.put(fullName, pair);
                 }
             }

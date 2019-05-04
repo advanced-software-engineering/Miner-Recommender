@@ -20,6 +20,16 @@ public class Similarity {
 
     private double similarityCounter = 0;
     private double maxSimilarityValue = 0;
+    private boolean isCalculated = false;
+
+    private double similarity = 0.0;
+    private double similarityReceiverType = 0.0;
+    private double similarityRequiredType = 0.0;
+    private double similarityObjectOrigin = 0.0;
+    private double similaritySurroundingExpression = 0.0;
+    private double similarityEnclosingMethodReturnType = 0.0;
+    private double similarityEnclosingMethodParameterSize = 0.0;
+    private double similarityEnclosingMethodParameters = 0.0;
 
     public Similarity(Query q1, Query q2) {
         this.q1 = q1;
@@ -27,6 +37,10 @@ public class Similarity {
     }
 
     public double calculate() {
+        if (isCalculated) {
+            return similarity;
+        }
+
         if (q1 == null && q2 == null) {
             return 1.0;
         } else if (q1 == null || q2 == null) {
@@ -45,14 +59,24 @@ public class Similarity {
         calcSurroundingExpression();
         calcEnclosingMethod();
 
-        return similarityCounter / maxSimilarityValue;
+        similarity = similarityCounter / maxSimilarityValue;
+        return similarity;
+    }
+
+    public SimilarityDto calculateWithDetails() {
+        if (!isCalculated) {
+            calculate();
+        }
+
+        return new SimilarityDto(similarity, similarityReceiverType, similarityRequiredType, similarityObjectOrigin, similaritySurroundingExpression, similarityEnclosingMethodReturnType, similarityEnclosingMethodParameterSize, similarityEnclosingMethodParameters);
     }
 
     private void calcReceiverType() {
         String rt1 = q1.getReceiverType();
         String rt2 = q2.getReceiverType();
 
-        similarityCounter += WEIGHT_RECEIVER_TYPE * equalsToSimilarity(rt1, rt2);
+        similarityReceiverType = equalsToSimilarity(rt1, rt2);
+        similarityCounter += WEIGHT_RECEIVER_TYPE * similarityReceiverType;
         maxSimilarityValue += WEIGHT_RECEIVER_TYPE;
     }
 
@@ -60,7 +84,8 @@ public class Similarity {
         String rt1 = q1.getRequiredType();
         String rt2 = q2.getRequiredType();
 
-        similarityCounter += WEIGHT_REQUIRED_TYPE * equalsToSimilarity(rt1, rt2);
+        similarityRequiredType = equalsToSimilarity(rt1, rt2);
+        similarityCounter += WEIGHT_REQUIRED_TYPE * similarityRequiredType;
         maxSimilarityValue += WEIGHT_REQUIRED_TYPE;
     }
 
@@ -68,7 +93,8 @@ public class Similarity {
         ObjectOrigin oo1 = q1.getObjectOrigin();
         ObjectOrigin oo2 = q2.getObjectOrigin();
 
-        similarityCounter += WEIGHT_OBJECT_ORIGIN * equalsToSimilarity(oo1, oo2);
+        similarityObjectOrigin = equalsToSimilarity(oo1, oo2);
+        similarityCounter += WEIGHT_OBJECT_ORIGIN * similarityObjectOrigin;
         maxSimilarityValue += WEIGHT_OBJECT_ORIGIN;
     }
 
@@ -76,11 +102,12 @@ public class Similarity {
         SurroundingExpression se1 = q1.getSurroundingExpression();
         SurroundingExpression se2 = q2.getSurroundingExpression();
 
-        similarityCounter += WEIGHT_SURROUNDING_EXPRESSION * equalsToSimilarity(se1, se2);
+        similaritySurroundingExpression = equalsToSimilarity(se1, se2);
+        similarityCounter += WEIGHT_SURROUNDING_EXPRESSION * similaritySurroundingExpression;
         maxSimilarityValue += WEIGHT_SURROUNDING_EXPRESSION;
     }
 
-    private void calcEnclosingMethod(){
+    private void calcEnclosingMethod() {
         EnclosingMethodSignature ems1 = q1.getEnclosingMethodSignature();
         EnclosingMethodSignature ems2 = q2.getEnclosingMethodSignature();
 
@@ -89,13 +116,17 @@ public class Similarity {
 
             if (ems1.getParameters() != null && ems2.getParameters() != null) {
                 if (ems1.getParameters().size() == ems2.getParameters().size()) {
-                    similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE;
+                    similarityEnclosingMethodParameterSize = 1.0;
+                    similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE * similarityEnclosingMethodParameterSize;
                 }
 
                 calcEnclosingMethodParameters(ems1, ems2);
             }
         } else if (ems1 == null && ems2 == null) {
             //EnclosingMethodType from q1 and q2 are null so they are same
+            similarityEnclosingMethodReturnType = 1.0;
+            similarityEnclosingMethodParameterSize = 1.0;
+            similarityEnclosingMethodParameters = 1.0;
             similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER;
         }
 
@@ -103,17 +134,24 @@ public class Similarity {
 
     }
 
-    private void calcEnclosingMethodReturnType(EnclosingMethodSignature ems1, EnclosingMethodSignature ems2){
+    private void calcEnclosingMethodReturnType(EnclosingMethodSignature ems1, EnclosingMethodSignature ems2) {
+        boolean sameReturnType = false;
+
         String fqrt1 = ems1.getFullyQualifiedReturnType();
         String fqrt2 = ems2.getFullyQualifiedReturnType();
         if (fqrt1 == null && fqrt2 == null) {
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE;
+            sameReturnType = true;
         } else if (fqrt1 != null && fqrt1.equals(fqrt2)) {
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE;
+            sameReturnType = true;
+        }
+
+        if (sameReturnType) {
+            similarityEnclosingMethodReturnType = 1.0;
+            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE * similarityEnclosingMethodReturnType;
         }
     }
 
-    private void calcEnclosingMethodParameters(EnclosingMethodSignature ems1, EnclosingMethodSignature ems2){
+    private void calcEnclosingMethodParameters(EnclosingMethodSignature ems1, EnclosingMethodSignature ems2) {
         //increase the maxPossible similarity by at most one, thus divide similarity increase by longer parameter list times two because foreach
         // parameter name and type can be compared
         int parameterLength = Math.max(ems1.getParameters().size(), ems2.getParameters().size());
@@ -139,10 +177,12 @@ public class Similarity {
             double similarityParameterNames = SUBWEIGHT_PARAMETER_NAME * countSameParameterName / parameterLength;
             double similarityParameterTypes = SUBWEIGHT_PARAMETER_TYPE * countSameParameterType / parameterLength;
             double totalSubWeights = SUBWEIGHT_PARAMETER_NAME + SUBWEIGHT_PARAMETER_TYPE;
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER * (similarityParameterNames + similarityParameterTypes) / totalSubWeights;
+            similarityEnclosingMethodParameters = (similarityParameterNames + similarityParameterTypes) / totalSubWeights;
         } else {
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER;
+            similarityEnclosingMethodParameters = 1.0;
         }
+
+        similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER * similarityEnclosingMethodParameters;
     }
 
     private double equalsToSimilarity(Object o1, Object o2) {
