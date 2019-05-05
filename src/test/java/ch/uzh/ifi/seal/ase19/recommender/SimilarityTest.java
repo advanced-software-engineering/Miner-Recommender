@@ -22,16 +22,17 @@ public class SimilarityTest {
          5 fullyQualifiedReturnType;
          6 number of parameters
          7 parameterSimilarity (for each parameter look at name and type)
+         8 enclosingMethodSignature super method
          If resultType is unequal similarity is 0
     */
 
     @Test
-    public void testSimilarity() {
+    public void testSimilarity1() {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
 
         double similarity = new Similarity(q1, q2).calculate();
-        // 7 out of 7 things are similar
+        // 8 out of 8 things are similar
         Assertions.assertEquals(1, similarity);
     }
 
@@ -41,8 +42,8 @@ public class SimilarityTest {
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.LOOP, ObjectOrigin.LOCAL, "System.String", null);
 
         double similarity = new Similarity(q1, q2).calculate();
-        // 6 out of 7 things are similar, should return
-        Assertions.assertEquals(0.85, similarity, 0.01);
+        // 7 out of 8 things are similar, should return
+        Assertions.assertEquals(0.875, similarity, 0.01);
     }
 
     @Test
@@ -51,8 +52,8 @@ public class SimilarityTest {
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "SomethingElse", SurroundingExpression.LOOP, ObjectOrigin.LOCAL, "System.String", null);
 
         double similarity = new Similarity(q1, q2).calculate();
-        // 5 out of 7 things are similar, should return
-        Assertions.assertEquals(0.71, similarity, 0.01);
+        // 6 out of 8 things are similar, should return
+        Assertions.assertEquals(0.75, similarity, 0.01);
     }
 
     @Test
@@ -72,7 +73,7 @@ public class SimilarityTest {
 
         double similarity = new Similarity(q1, q2).calculate();
         // EncosingMethodSignature has the same amount of params in q1 and q2
-        // 7 out of 7 things are similar
+        // 8 out of 8 things are similar
         Assertions.assertEquals(1, similarity);
     }
 
@@ -92,8 +93,8 @@ public class SimilarityTest {
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature2);
 
         double similarity = new Similarity(q1, q2).calculate();
-        // EncosingMethodSignature m2 has one parameter more, 6 out of 7 (parameter length not same)
-        Assertions.assertEquals(0.85, similarity, 0.01);
+        // EncosingMethodSignature m2 has one parameter more, 7 out of 8 (parameter length not same)
+        Assertions.assertEquals(0.875, similarity, 0.01);
     }
 
     @Test
@@ -113,18 +114,19 @@ public class SimilarityTest {
         Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature1);
         Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", enclosingMethodSignature2);
 
-        double similarity = new Similarity(q1, q2).calculate();
+        Similarity s = new Similarity(q1, q2);
+        double similarity = s.calculate();
         double similarityTransitive = new Similarity(q2, q1).calculate();
         /*
             same: receiverType, surroundingType, objectOrigin, requiredType (total +4)
-            same fullyQualifiedReturnType of enclosingMethodSignature (+1)
+            same fullyQualifiedReturnType and super method of enclosingMethodSignature (+2)
             not same parameter length
             + 0.125 for same parameter name
             + 0.75 for same parameter type
          */
         // all params are the same except one has different name --> (1/paramListLenght*2) * weight = (1/2*2) * 0.5 = 0.125
-        // 7 - 1 - 0.125 = 5.875 (-1 for parameter length)
-        Assertions.assertEquals(0.83, similarity, 0.01);
+        // 8 - 1 - 0.125 = 0.859375 (-1 for parameter length)
+        Assertions.assertEquals(0.85, similarity, 0.01);
         //order of comparison should not matter!
         Assertions.assertEquals(similarity, similarityTransitive, 0.01);
     }
@@ -135,7 +137,7 @@ public class SimilarityTest {
         Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, null);
 
         double similarity = new Similarity(q1, q2).calculate();
-        // 7 out of 7 things are similar
+        // 8 out of 8 things are similar
         Assertions.assertEquals(1, similarity);
     }
 
@@ -191,16 +193,152 @@ public class SimilarityTest {
     }
 
     @Test
-    public void similarityTest11(){
-        Query q1 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", null);
-        EnclosingMethodSignature ems1 = mock(EnclosingMethodSignature.class);
-        Query q2 = new Query(ResultType.METHOD_INVOCATION, "System.IO.StreamReader", SurroundingExpression.ASSIGNMENT, ObjectOrigin.LOCAL, "System.String", ems1);
+    public void testSimilarity11() {
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature("abc", null, null, new ArrayList<>(), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature("def", null, null, new ArrayList<>(), null);
 
-        double similarity = new Similarity(q1,q2).calculate();
-        //ems1 is not null but all its members are, should this test really fail?
-        // Should we expect the similarity to be 1?
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 8 out of 8 things are similar
         Assertions.assertEquals(1, similarity);
     }
-    
 
+    @Test
+    public void testSimilarity12() {
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, "abc", null, new ArrayList<>(), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, "def", null, new ArrayList<>(), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 8 out of 8 things are similar
+        Assertions.assertEquals(1, similarity);
+    }
+
+    @Test
+    public void testSimilarity13() {
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, "abc", new ArrayList<>(), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, "def", new ArrayList<>(), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 7 out of 8 things are similar
+        Assertions.assertEquals(0.875, similarity, 0.01);
+    }
+
+    @Test
+    public void testSimilarity14() {
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, "abc", new ArrayList<>(), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, "abc", new ArrayList<>(), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 8 out of 8 things are similar
+        Assertions.assertEquals(1, similarity);
+    }
+
+    @Test
+    public void testSimilarity15() {
+        MethodParameter mp1 = new MethodParameter("abc", "def");
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp1), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, null, new ArrayList<>(), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 6 out of 8 things are similar
+        // different parameter size and parameters
+        Assertions.assertEquals(0.75, similarity, 0.01);
+    }
+
+    @Test
+    public void testSimilarity16() {
+        MethodParameter mp1 = new MethodParameter("abc", "def");
+        MethodParameter mp2 = new MethodParameter("def", "ghi");
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp1), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp2), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 7 out of 8 things are similar
+        // different parameters
+        Assertions.assertEquals(0.875, similarity, 0.01);
+    }
+
+    @Test
+    public void testSimilarity17() {
+        MethodParameter mp1 = new MethodParameter("abc", "def");
+        MethodParameter mp2 = new MethodParameter("abc", "def");
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp1), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp2), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 8 out of 8 things are similar
+        Assertions.assertEquals(1, similarity);
+    }
+
+    @Test
+    public void testSimilarity18() {
+        MethodParameter mp1 = new MethodParameter("abc", "def");
+        MethodParameter mp2 = new MethodParameter("abc", "ghi");
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp1), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp2), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 7 out of 8 things are similar
+        // different parameters types but same name (-0.75)
+        Assertions.assertEquals(0.90, similarity, 0.01);
+    }
+
+    @Test
+    public void testSimilarity19() {
+        MethodParameter mp1 = new MethodParameter("abc", "def");
+        MethodParameter mp2 = new MethodParameter("xyz", "def");
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp1), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp2), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        Similarity a = new Similarity(q1, q2);
+        double similarity = a.calculate();
+        // 7.75 out of 8 things are similar
+        // different parameters types but same name (-0.25)
+        Assertions.assertEquals(0.96, similarity, 0.01);
+    }
+
+    @Test
+    public void testSimilarity20() {
+        MethodParameter mp1 = new MethodParameter("abc", "def");
+        MethodParameter[] mp2 = new MethodParameter[]{new MethodParameter("abc", "def"), new MethodParameter("ghi", "jkl")};
+        EnclosingMethodSignature enclosingMethodSignature1 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp1), null);
+        EnclosingMethodSignature enclosingMethodSignature2 = new EnclosingMethodSignature(null, null, null, Arrays.asList(mp2), null);
+
+        Query q1 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature1);
+        Query q2 = new Query(ResultType.METHOD_INVOCATION, null, null, null, null, enclosingMethodSignature2);
+
+        Similarity a = new Similarity(q1, q2);
+        a.calculateWithDetails();
+
+        double similarity = new Similarity(q1, q2).calculate();
+        // 6.5 out of 8 things are similar
+        // parameter size different (-1) and only 1 of 2 parameters same (-0.5)
+        Assertions.assertEquals(0.81, similarity, 0.01);
+    }
 }

@@ -26,6 +26,14 @@ public class EnclosingMethodSignature {
         }
     }
 
+    public EnclosingMethodSignature(String fullyQualifiedClassName, String methodName, String fullyQualifiedReturnType, List<MethodParameter> parameters, EnclosingMethodSignature superMethodSignature) {
+        this.fullyQualifiedClassName = fullyQualifiedClassName;
+        this.methodName = methodName;
+        this.fullyQualifiedReturnType = fullyQualifiedReturnType;
+        this.parameters = parameters;
+        this.superMethodSignature = superMethodSignature;
+    }
+
     public String getFullyQualifiedReturnType() {
         return fullyQualifiedReturnType;
     }

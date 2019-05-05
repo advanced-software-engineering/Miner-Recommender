@@ -28,7 +28,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     @Override
     public TreeSet<Pair<IMemberName, Double>> query(Query query) {
         Set<Pair<IMemberName, SimilarityDto>> res = queryWithDetails(query);
-        return res.parallelStream().map(it -> Pair.of(it.getLeft(), it.getRight().getSimilarity())).collect(
+        return res.parallelStream().map(it -> Pair.of(it.getLeft(), it.getRight().similarity)).collect(
                 Collectors.toCollection(() -> new TreeSet<>(new Comparator<Pair<IMemberName, Double>>() {
                     @Override
                     public int compare(Pair<IMemberName, Double> o1, Pair<IMemberName, Double> o2) {
@@ -42,7 +42,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
         TreeSet<Pair<IMemberName, SimilarityDto>> recommendations = new TreeSet<>(new Comparator<Pair<IMemberName, SimilarityDto>>() {
             @Override
             public int compare(Pair<IMemberName, SimilarityDto> o1, Pair<IMemberName, SimilarityDto> o2) {
-                return -1 * o1.getRight().getSimilarity().compareTo(o2.getRight().getSimilarity());
+                return -1 * o1.getRight().similarity.compareTo(o2.getRight().similarity);
             }
         });
 
@@ -63,7 +63,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
                 map.put(fullName, pair);
             } else {
                 // update the map to have the pair with the higher similarity in it
-                if (map.get(fullName).getRight().getSimilarity() < pair.getRight().getSimilarity()) {
+                if (map.get(fullName).getRight().similarity < pair.getRight().similarity) {
                     map.put(fullName, pair);
                 }
             }

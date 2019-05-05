@@ -11,6 +11,7 @@ public class Similarity {
     private final static double WEIGHT_ENCLOSING_METHOD_RETURN_TYPE = 1.0;
     private final static double WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE = 1.0;
     private final static double WEIGHT_ENCLOSING_METHOD_PARAMETER = 1.0;
+    private final static double WEIGHT_ENCLOSING_METHOD_SUPER = 1.0;
 
     private final static double SUBWEIGHT_PARAMETER_NAME = 0.25;
     private final static double SUBWEIGHT_PARAMETER_TYPE = 0.75;
@@ -30,6 +31,7 @@ public class Similarity {
     private double similarityEnclosingMethodReturnType = 0.0;
     private double similarityEnclosingMethodParameterSize = 0.0;
     private double similarityEnclosingMethodParameters = 0.0;
+    private double similarityEnclosingMethodSuper = 0.0;
 
     public Similarity(Query q1, Query q2) {
         this.q1 = q1;
@@ -68,7 +70,7 @@ public class Similarity {
             calculate();
         }
 
-        return new SimilarityDto(similarity, similarityReceiverType, similarityRequiredType, similarityObjectOrigin, similaritySurroundingExpression, similarityEnclosingMethodReturnType, similarityEnclosingMethodParameterSize, similarityEnclosingMethodParameters);
+        return new SimilarityDto(similarity, similarityReceiverType, similarityRequiredType, similarityObjectOrigin, similaritySurroundingExpression, similarityEnclosingMethodReturnType, similarityEnclosingMethodParameterSize, similarityEnclosingMethodParameters, similarityEnclosingMethodSuper);
     }
 
     private void calcReceiverType() {
@@ -113,6 +115,7 @@ public class Similarity {
 
         if (ems1 != null && ems2 != null) {
             calcEnclosingMethodReturnType(ems1, ems2);
+            calcEnclosingMethodSuper(ems1, ems2);
 
             if (ems1.getParameters() != null && ems2.getParameters() != null) {
                 if (ems1.getParameters().size() == ems2.getParameters().size()) {
@@ -127,10 +130,11 @@ public class Similarity {
             similarityEnclosingMethodReturnType = 1.0;
             similarityEnclosingMethodParameterSize = 1.0;
             similarityEnclosingMethodParameters = 1.0;
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER;
+            similarityEnclosingMethodSuper = 1.0;
+            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER + WEIGHT_ENCLOSING_METHOD_SUPER;
         }
 
-        maxSimilarityValue += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER;
+        maxSimilarityValue += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER + WEIGHT_ENCLOSING_METHOD_SUPER;
 
     }
 
@@ -148,6 +152,30 @@ public class Similarity {
         if (sameReturnType) {
             similarityEnclosingMethodReturnType = 1.0;
             similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE * similarityEnclosingMethodReturnType;
+        }
+    }
+
+    private void calcEnclosingMethodSuper(EnclosingMethodSignature ems1, EnclosingMethodSignature ems2) {
+        boolean sameSuper = false;
+
+        EnclosingMethodSignature s1 = ems1.getSuperMethodSignature();
+        EnclosingMethodSignature s2 = ems2.getSuperMethodSignature();
+
+        if (s1 == null && s2 == null) {
+            sameSuper = true;
+        } else if (s1 != null && s2 != null) {
+            String fqrt1 = s1.getFullyQualifiedReturnType();
+            String fqrt2 = s2.getFullyQualifiedReturnType();
+            if (fqrt1 == null && fqrt2 == null) {
+                sameSuper = true;
+            } else if (fqrt1 != null && fqrt1.equals(fqrt2)) {
+                sameSuper = true;
+            }
+        }
+
+        if (sameSuper) {
+            similarityEnclosingMethodSuper = 1.0;
+            similarityCounter += WEIGHT_ENCLOSING_METHOD_SUPER * similarityEnclosingMethodSuper;
         }
     }
 
