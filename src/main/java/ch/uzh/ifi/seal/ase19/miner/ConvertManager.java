@@ -36,11 +36,9 @@ class ConvertManager {
             setSuperMethodSignature(enclosingMethodSignature);
         }
 
-        ObjectOrigin objectOrigin;
+        ObjectOrigin objectOrigin = null;
         IVariableReference reference = methodInvocation.getReference();
-        if (reference.isMissing()) {
-            return null;
-        } else {
+        if (!reference.isMissing()) {
             String referenceIdentifier = reference.getIdentifier();
             objectOrigin = getObjectOrigin(referenceIdentifier, enclosingMethodSignature);
         }
