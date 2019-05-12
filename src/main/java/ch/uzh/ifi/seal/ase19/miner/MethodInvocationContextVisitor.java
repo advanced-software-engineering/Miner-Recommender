@@ -2,8 +2,10 @@ package ch.uzh.ifi.seal.ase19.miner;
 
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
+import cc.kave.commons.model.ssts.expressions.assignable.ICompletionExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.ILambdaExpression;
+import cc.kave.commons.model.ssts.impl.expressions.assignable.InvocationExpression;
 import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.statements.IAssignment;
 import cc.kave.commons.model.ssts.statements.IReturnStatement;
@@ -15,6 +17,7 @@ import java.util.List;
 
 public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisitor<MethodInvocationContext, Void> {
     private List<MethodInvocationContext> found = new ArrayList<>();
+    private List<MethodInvocationContext> completionEvent = new ArrayList<>();
 
     @Override
     public Void visit(IMethodDeclaration decl, MethodInvocationContext context) {
@@ -59,6 +62,16 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
     }
 
     @Override
+    public Void visit(ICompletionExpression entity, MethodInvocationContext context) {
+        InvocationExpression abc = new InvocationExpression();
+        abc.setReference(entity.getVariableReference());
+
+        MethodInvocationContext newContext = context.setMethodInvocation(abc);
+        completionEvent.add(newContext);
+        return super.visit(entity, newContext);
+    }
+
+    @Override
     public Void visit(IAssignment stmt, MethodInvocationContext context) {
         return super.visit(stmt, context.setSurroundingExpression(SurroundingExpression.ASSIGNMENT));
     }
@@ -80,5 +93,9 @@ public class MethodInvocationContextVisitor extends AbstractTraversingNodeVisito
 
     List<MethodInvocationContext> getFound() {
         return found;
+    }
+
+    public List<MethodInvocationContext> getCompletionEvent() {
+        return completionEvent;
     }
 }

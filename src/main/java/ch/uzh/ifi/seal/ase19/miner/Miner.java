@@ -48,7 +48,7 @@ public class Miner {
                 processor.runAndPersist(context);
             }
 
-            if(counter % 100 == 0){
+            if (counter % 100 == 0) {
                 persistence.saveOnFileSystem();
             }
 

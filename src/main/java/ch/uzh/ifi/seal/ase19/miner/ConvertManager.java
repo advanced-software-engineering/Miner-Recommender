@@ -38,7 +38,7 @@ class ConvertManager {
 
         ObjectOrigin objectOrigin = null;
         IVariableReference reference = methodInvocation.getReference();
-        if (!reference.isMissing()) {
+        if (reference != null && !reference.isMissing()) {
             String referenceIdentifier = reference.getIdentifier();
             objectOrigin = getObjectOrigin(referenceIdentifier, enclosingMethodSignature);
         }

@@ -43,6 +43,14 @@ public class Query {
         return enclosingMethodSignature;
     }
 
+    public void setReceiverType(String receiverType) {
+        this.receiverType = receiverType;
+    }
+
+    public void setRequiredType(String requiredType) {
+        this.requiredType = requiredType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
