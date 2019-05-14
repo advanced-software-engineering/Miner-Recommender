@@ -91,4 +91,8 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     public int getLastModelSize() {
         return lastModelSize;
     }
+
+    public void persist(QuerySelection querySelection){
+        pm.saveModel(querySelection);
+    }
 }
