@@ -186,7 +186,6 @@ public class SimilarityTest {
         double similarity = new Similarity(q1, q2).calculate();
         double similarity1 = new Similarity(q2, q3).calculate();
 
-        System.out.println(similarity + "   " + similarity1);
         // q2 and q3 should be more similar than q1 and q2
         Assertions.assertTrue(similarity < similarity1);
 
