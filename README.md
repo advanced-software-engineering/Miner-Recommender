@@ -58,7 +58,7 @@ You can run the application with `ch.uzh.ifi.seal.ase19.miner.Miner C:\ase\Conte
 
 ## Recommendation
 
-TODO
+Our recommender implements the predefined [IMemberRecommender](https://github.com/kave-cc/java-cc-kave/blob/master/cc.kave.rsse.calls/src/main/java/cc/kave/rsse/calls/IMemberRecommender.java) interface. For querying we either need a Context  or a [query](https://github.com/advanced-software-engineering/Miner-Recommender/blob/master/src/main/java/ch/uzh/ifi/seal/ase19/core/models/Query.java) object. Additionally the recommender has a `persist` method to incremental update the model.
 
 ## Example
 
@@ -66,7 +66,12 @@ Run the `Example.java` file in the `evaluation & example` repository. No command
 
 ## Evaluation 
 
+__A replication of the original evaluation is not possible because they only briefly summarized some findings but no concrete statistics which we could compare. We used the provided dataset to design our own evaluation.__
+
+Before the evaluation the recommendation models are built with the context dataset (see section miner). Afterwards, we used the  event dataset to analyse the prediction quality. 
+
 TODO
 
 ## Sample Model
 
+TODO
