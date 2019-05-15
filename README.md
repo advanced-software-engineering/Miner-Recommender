@@ -72,6 +72,8 @@ Before the evaluation the recommendation models are built with the context datas
 
 TODO
 
-## Sample Model
+## Models
 
-TODO
+As the mining process takes several hours we provide the full mined models here.
+
+TODO UPLOAD MODELS SOMETHERE.
