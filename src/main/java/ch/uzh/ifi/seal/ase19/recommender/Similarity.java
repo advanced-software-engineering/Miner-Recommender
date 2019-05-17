@@ -5,7 +5,6 @@ import ch.uzh.ifi.seal.ase19.core.models.*;
 import java.util.HashMap;
 
 public class Similarity {
-
     private double weightReceiverType;
     private double weightRequiredType;
     private double weightObjectOrigin;
@@ -34,6 +33,19 @@ public class Similarity {
     private double similarityEnclosingMethodParameterSize = 0.0;
     private double similarityEnclosingMethodParameters = 0.0;
     private double similarityEnclosingMethodSuper = 0.0;
+
+    public Similarity(Query q1, Query q2) {
+        this.q1 = q1;
+        this.q2 = q2;
+        this.weightReceiverType = 1.0;
+        this.weightRequiredType = 1.0;
+        this.weightObjectOrigin = 1.0;
+        this.weightSurroundingExpression = 1.0;
+        this.weightEnclosingMethodReturnType = 1.0;
+        this.weightEnclosingMethodParameterSize = 1.0;
+        this.weightEnclosingMethodParameters = 1.0;
+        this.weightEnclosingMethodSuper = 1.0;
+    }
 
     public Similarity(Query q1, Query q2, HashMap<String, Double> weights) {
         this.q1 = q1;

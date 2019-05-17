@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
-    private static final HashMap<String, Double> DEFAULT_WEIGHTS = createDefaultWeightMap();
     private ContextProcessor processor;
     private IPersistenceManager pm;
     private HashMap<String, Double> weights;
@@ -23,7 +22,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
     private int lastModelSize = 0;
 
     public MethodCallRecommender(ContextProcessor processor, IPersistenceManager pm) {
-        this(processor, pm, DEFAULT_WEIGHTS);
+        this(processor, pm, null);
     }
 
     public MethodCallRecommender(ContextProcessor processor, IPersistenceManager pm, HashMap<String, Double> weights) {
@@ -31,19 +30,6 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
         this.pm = pm;
         this.weights = weights;
 
-    }
-
-    private static HashMap<String, Double> createDefaultWeightMap() {
-        HashMap<String, Double> defaultWeights = new HashMap<>();
-        defaultWeights.put("receiverType", 1.0);
-        defaultWeights.put("requiredType", 1.0);
-        defaultWeights.put("objectOrigin", 1.0);
-        defaultWeights.put("surroundingExpression", 1.0);
-        defaultWeights.put("enclosingMethodReturnType", 1.0);
-        defaultWeights.put("enclosingMethodParameterSize", 1.0);
-        defaultWeights.put("enclosingMethodParameters", 1.0);
-        defaultWeights.put("enclosingMethodSuper", 1.0);
-        return defaultWeights;
     }
 
     @Override
@@ -69,7 +55,12 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
         ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
         for (QuerySelection querySelection : rtq.getItems()) {
-            Similarity similarity = new Similarity(querySelection.getQuery(), query, this.weights);
+            Similarity similarity = null;
+            if (weights == null) {
+                similarity = new Similarity(querySelection.getQuery(), query);
+            } else {
+                similarity = new Similarity(querySelection.getQuery(), query, this.weights);
+            }
             recommendations.add(new ImmutablePair<>(querySelection.getSelection(), similarity.calculateWithDetails()));
         }
 
