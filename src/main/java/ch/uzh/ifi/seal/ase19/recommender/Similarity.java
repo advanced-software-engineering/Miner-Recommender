@@ -2,16 +2,18 @@ package ch.uzh.ifi.seal.ase19.recommender;
 
 import ch.uzh.ifi.seal.ase19.core.models.*;
 
+import java.util.HashMap;
+
 public class Similarity {
 
-    private final static double WEIGHT_RECEIVER_TYPE = 1.0;
-    private final static double WEIGHT_REQUIRED_TYPE = 1.0;
-    private final static double WEIGHT_OBJECT_ORIGIN = 1.0;
-    private final static double WEIGHT_SURROUNDING_EXPRESSION = 1.0;
-    private final static double WEIGHT_ENCLOSING_METHOD_RETURN_TYPE = 1.0;
-    private final static double WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE = 1.0;
-    private final static double WEIGHT_ENCLOSING_METHOD_PARAMETER = 1.0;
-    private final static double WEIGHT_ENCLOSING_METHOD_SUPER = 1.0;
+    private double weightReceiverType;
+    private double weightRequiredType;
+    private double weightObjectOrigin;
+    private double weightSurroundingExpression;
+    private double weightEnclosingMethodReturnType;
+    private double weightEnclosingMethodParameterSize;
+    private double weightEnclosingMethodParameters;
+    private double weightEnclosingMethodSuper;
 
     private final static double SUBWEIGHT_PARAMETER_NAME = 0.25;
     private final static double SUBWEIGHT_PARAMETER_TYPE = 0.75;
@@ -33,9 +35,17 @@ public class Similarity {
     private double similarityEnclosingMethodParameters = 0.0;
     private double similarityEnclosingMethodSuper = 0.0;
 
-    public Similarity(Query q1, Query q2) {
+    public Similarity(Query q1, Query q2, HashMap<String, Double> weights) {
         this.q1 = q1;
         this.q2 = q2;
+        this.weightReceiverType = weights.get("receiverType");
+        this.weightRequiredType = weights.get("requiredType");
+        this.weightObjectOrigin = weights.get("objectOrigin");
+        this.weightSurroundingExpression = weights.get("surroundingExpression");
+        this.weightEnclosingMethodReturnType = weights.get("enclosingMethodReturnType");
+        this.weightEnclosingMethodParameterSize = weights.get("enclosingMethodParameterSize");
+        this.weightEnclosingMethodParameters = weights.get("enclosingMethodParameters");
+        this.weightEnclosingMethodSuper = weights.get("enclosingMethodSuper");
     }
 
     public double calculate() {
@@ -78,8 +88,8 @@ public class Similarity {
         String rt2 = q2.getReceiverType();
 
         similarityReceiverType = equalsToSimilarity(rt1, rt2);
-        similarityCounter += WEIGHT_RECEIVER_TYPE * similarityReceiverType;
-        maxSimilarityValue += WEIGHT_RECEIVER_TYPE;
+        similarityCounter += weightReceiverType * similarityReceiverType;
+        maxSimilarityValue += weightReceiverType;
     }
 
     private void calcRequiredType() {
@@ -87,8 +97,8 @@ public class Similarity {
         String rt2 = q2.getRequiredType();
 
         similarityRequiredType = equalsToSimilarity(rt1, rt2);
-        similarityCounter += WEIGHT_REQUIRED_TYPE * similarityRequiredType;
-        maxSimilarityValue += WEIGHT_REQUIRED_TYPE;
+        similarityCounter += weightRequiredType * similarityRequiredType;
+        maxSimilarityValue += weightRequiredType;
     }
 
     private void calcObjectOrigin() {
@@ -96,8 +106,8 @@ public class Similarity {
         ObjectOrigin oo2 = q2.getObjectOrigin();
 
         similarityObjectOrigin = equalsToSimilarity(oo1, oo2);
-        similarityCounter += WEIGHT_OBJECT_ORIGIN * similarityObjectOrigin;
-        maxSimilarityValue += WEIGHT_OBJECT_ORIGIN;
+        similarityCounter += weightObjectOrigin * similarityObjectOrigin;
+        maxSimilarityValue += weightObjectOrigin;
     }
 
     private void calcSurroundingExpression() {
@@ -105,8 +115,8 @@ public class Similarity {
         SurroundingExpression se2 = q2.getSurroundingExpression();
 
         similaritySurroundingExpression = equalsToSimilarity(se1, se2);
-        similarityCounter += WEIGHT_SURROUNDING_EXPRESSION * similaritySurroundingExpression;
-        maxSimilarityValue += WEIGHT_SURROUNDING_EXPRESSION;
+        similarityCounter += weightSurroundingExpression * similaritySurroundingExpression;
+        maxSimilarityValue += weightSurroundingExpression;
     }
 
     private void calcEnclosingMethod() {
@@ -120,7 +130,7 @@ public class Similarity {
             if (ems1.getParameters() != null && ems2.getParameters() != null) {
                 if (ems1.getParameters().size() == ems2.getParameters().size()) {
                     similarityEnclosingMethodParameterSize = 1.0;
-                    similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE * similarityEnclosingMethodParameterSize;
+                    similarityCounter += weightEnclosingMethodParameterSize * similarityEnclosingMethodParameterSize;
                 }
 
                 calcEnclosingMethodParameters(ems1, ems2);
@@ -131,10 +141,10 @@ public class Similarity {
             similarityEnclosingMethodParameterSize = 1.0;
             similarityEnclosingMethodParameters = 1.0;
             similarityEnclosingMethodSuper = 1.0;
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER + WEIGHT_ENCLOSING_METHOD_SUPER;
+            similarityCounter += weightEnclosingMethodReturnType + weightEnclosingMethodParameterSize + weightEnclosingMethodParameters + weightEnclosingMethodSuper;
         }
 
-        maxSimilarityValue += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE + WEIGHT_ENCLOSING_METHOD_PARAMETER_SIZE + WEIGHT_ENCLOSING_METHOD_PARAMETER + WEIGHT_ENCLOSING_METHOD_SUPER;
+        maxSimilarityValue += weightEnclosingMethodReturnType + weightEnclosingMethodParameterSize + weightEnclosingMethodParameters + weightEnclosingMethodSuper;
 
     }
 
@@ -151,7 +161,7 @@ public class Similarity {
 
         if (sameReturnType) {
             similarityEnclosingMethodReturnType = 1.0;
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_RETURN_TYPE * similarityEnclosingMethodReturnType;
+            similarityCounter += weightEnclosingMethodReturnType * similarityEnclosingMethodReturnType;
         }
     }
 
@@ -175,7 +185,7 @@ public class Similarity {
 
         if (sameSuper) {
             similarityEnclosingMethodSuper = 1.0;
-            similarityCounter += WEIGHT_ENCLOSING_METHOD_SUPER * similarityEnclosingMethodSuper;
+            similarityCounter += weightEnclosingMethodSuper * similarityEnclosingMethodSuper;
         }
     }
 
@@ -210,7 +220,7 @@ public class Similarity {
             similarityEnclosingMethodParameters = 1.0;
         }
 
-        similarityCounter += WEIGHT_ENCLOSING_METHOD_PARAMETER * similarityEnclosingMethodParameters;
+        similarityCounter += weightEnclosingMethodParameters * similarityEnclosingMethodParameters;
     }
 
     private double equalsToSimilarity(Object o1, Object o2) {
