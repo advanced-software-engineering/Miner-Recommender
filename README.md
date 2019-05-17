@@ -76,4 +76,4 @@ TODO
 
 As the mining process takes several hours we provide the full mined models here.
 
-TODO UPLOAD MODELS SOMETHERE.
+https://drive.google.com/file/d/1_JFXkf_N_xuQfmv4VEjTvhWdpVhrv6F7/view?usp=sharing
