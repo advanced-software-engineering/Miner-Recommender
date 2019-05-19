@@ -17,7 +17,7 @@ Both repositories are under the Apache License 2.0.
 
 Our project is implemented in Java and we used git to coordinate the team development.
 
-The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 62 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5.
+The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 62 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5. Especially the similarity calculation was tested extensively.
 
 ## Installation
 
@@ -81,6 +81,8 @@ We are using the following information to calculate the similarity of two contex
     * number of method parameters of the enclosing method
     * name and fully qualified name of the method parameters
     * fully qualified name of super type
+    
+__Per default the similarity calculation is done with equal weights, but a developer can optionally set the weights as constructor argument__
     
 ## Example
 
