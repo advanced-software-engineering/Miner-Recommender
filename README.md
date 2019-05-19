@@ -94,6 +94,14 @@ __A replication of the original evaluation is not possible because they only bri
 
 Before the evaluation the recommendation models are built with the context dataset (see section miner). Afterwards, we used the  event dataset to analyse the prediction quality. 
 
+We used the Top-K accuracy to analyse the prediction quality. It checks if under the top k elements the correct recommendation occurs.
+
+### Basic evaluation with equally weighted attributes
+
+TODO
+
+### Similarity Weights Evaluation
+
 TODO
 
 ## Models
