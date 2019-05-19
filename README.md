@@ -15,6 +15,10 @@ The recommender is splitted up in two parts:
 
 Both repositories are under the Apache License 2.0.
 
+Our project is implemented in Java and we used git to coordinate the team development.
+
+The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 62 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5.
+
 ## Installation
 
 The Miner & Recommender project is built with Travis CI. The artifacts are deployed to a [Github repository](https://github.com/advanced-software-engineering/Maven-Repo).
@@ -60,6 +64,24 @@ You can run the application with `ch.uzh.ifi.seal.ase19.miner.Miner C:\ase\Conte
 
 Our recommender implements the predefined [IMemberRecommender](https://github.com/kave-cc/java-cc-kave/blob/master/cc.kave.rsse.calls/src/main/java/cc/kave/rsse/calls/IMemberRecommender.java) interface. For querying we either need a Context  or a [query](https://github.com/advanced-software-engineering/Miner-Recommender/blob/master/src/main/java/ch/uzh/ifi/seal/ase19/core/models/Query.java) object. Additionally the recommender has a `persist` method to incremental update the model.
 
+In the paper they extracted we following information for a completion context:
+* receiver object type
+* how the object entered the enclosing method
+* the kind of statement or expression surrounding the completion point
+* value type required for the final expression
+* signature of the enclosing method and the super type
+
+We are using the following information to calculate the similarity of two contexts:
+* fully qualified name of the receiver object type
+* how the object entered the enclosing method we differ between three options. Class (class or instance variable), method parameter and local (local variable in a method body).
+* the kind of statement or expression surrounding the completion point. We differ between the following options: Method body, branching condition, loop, assignment, return statement, lambda and try.
+* fully qualified name of the final value type
+* we splitted the enclosing method signature in multiple sub-elements
+    * fully qualified name of return type of the enclosing method
+    * number of method parameters of the enclosing method
+    * name and fully qualified name of the method parameters
+    * fully qualified name of super type
+    
 ## Example
 
 Run the `Example.java` file in the `evaluation & example` repository. No command line arguments are needed. The same query is asked multiple times. After each request the model is manually updated and the prediction becomes more meaningful.
