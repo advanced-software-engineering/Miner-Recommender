@@ -17,7 +17,7 @@ Both repositories are under the Apache License 2.0.
 
 Our project is implemented in Java and we used git to coordinate the team development.
 
-The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 62 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5.
+The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 62 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5. Especially the similarity calculation was tested extensively.
 
 ## Installation
 
@@ -82,6 +82,8 @@ We are using the following information to calculate the similarity of two contex
     * name and fully qualified name of the method parameters
     * fully qualified name of super type
     
+__Per default the similarity calculation is done with equal weights, but a developer can optionally set the weights as constructor argument__
+    
 ## Example
 
 Run the `Example.java` file in the `evaluation & example` repository. No command line arguments are needed. The same query is asked multiple times. After each request the model is manually updated and the prediction becomes more meaningful.
@@ -91,6 +93,14 @@ Run the `Example.java` file in the `evaluation & example` repository. No command
 __A replication of the original evaluation is not possible because they only briefly summarized some findings but no concrete statistics which we could compare. We used the provided dataset to design our own evaluation.__
 
 Before the evaluation the recommendation models are built with the context dataset (see section miner). Afterwards, we used the  event dataset to analyse the prediction quality. 
+
+We used the Top-K accuracy to analyse the prediction quality. It checks if under the top k elements the correct recommendation occurs.
+
+### Basic evaluation with equally weighted attributes
+
+TODO
+
+### Similarity Weights Evaluation
 
 TODO
 
