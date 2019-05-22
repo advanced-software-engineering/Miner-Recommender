@@ -97,10 +97,15 @@ Before the evaluation the recommendation models are built with the context datas
 We used the Top-K accuracy to analyse the prediction quality. It checks if under the top k elements the correct recommendation occurs.
 
 ### Basic evaluation with equally weighted attributes
+![baseline](https://user-images.githubusercontent.com/9574324/58184195-edf73400-7cb0-11e9-88f0-3bd4f6272364.png)
 
 TODO
 
 ### Similarity Weights Evaluation
+
+![weight_change](https://user-images.githubusercontent.com/9574324/58183880-63aed000-7cb0-11e9-9835-b607c5b2dec8.png)
+
+![weighed_changed](https://user-images.githubusercontent.com/9574324/58184245-08311200-7cb1-11e9-9ee6-ec52d74c376f.png)
 
 TODO
 
