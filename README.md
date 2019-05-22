@@ -92,11 +92,12 @@ Run the `Example.java` file in the `evaluation & example` repository. No command
 
 __A replication of the original evaluation is not possible because they only briefly summarized some findings but no concrete statistics which we could compare. We used the provided dataset to design our own evaluation.__
 
-Before the evaluation the recommendation models are built with the context dataset (see section miner). Afterwards, we used the  event dataset to analyse the prediction quality. 
+Before the evaluation the recommendation models are built with the context dataset which contains over 175'000 completion events (see section miner). Afterwards, we used the event dataset to analyse the prediction quality. We can only recommend a method if we previously learend to receiver type. In the pre-processing we filtered out completion events of the event dataset for which no prediction is possible. So the evaluation was done with over 3'000 completion events.
 
 We used the Top-K accuracy to analyse the prediction quality. It checks if under the top k elements the correct recommendation occurs.
 
 ### Basic evaluation with equally weighted attributes
+
 ![baseline](https://user-images.githubusercontent.com/9574324/58184195-edf73400-7cb0-11e9-88f0-3bd4f6272364.png)
 
 TODO
@@ -104,6 +105,26 @@ TODO
 ### Similarity Weights Evaluation
 
 ![weight_change](https://user-images.githubusercontent.com/9574324/58183880-63aed000-7cb0-11e9-9835-b607c5b2dec8.png)
+
+| Attribute     | Correlation value        | association |
+| ------------- |:-------------:|:-------------:|
+| final object type      | 0.42 | positive medium association |
+| object origin      | 0.20      | positive small association |
+| surrounding expression | 0.11      | positive small association |
+| enclosing method: return type | 0.13      | positive small association |
+| enclosing method: number of parameters | 0.21      | positive small association |
+| enclosing method: parameter types and names | 0.08      | positive very small association |
+| enclosing method:super type | 0.12      | positive small association |
+
+| Attribute     | Weight        |
+| ------------- |:-------------:|
+| final object type       | 2.0 |
+| object origin      | 1.0      |
+| surrounding expression | 1.0      |
+| enclosing method: return type | 1.0      |
+| enclosing method: number of parameters | 1.0      |
+| enclosing method: parameter types and names | 0.5      |
+| enclosing method:super type | 1.0      |
 
 ![weighed_changed](https://user-images.githubusercontent.com/9574324/58184245-08311200-7cb1-11e9-9ee6-ec52d74c376f.png)
 
