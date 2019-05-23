@@ -13,13 +13,19 @@ The recommender is splitted up in two parts:
 - Miner & Recommender (this repository)
 - Evaluation & Demo (repository [here](https://github.com/advanced-software-engineering/Evaluation-Examples))
 
-Both repositories are under the Apache License 2.0.
+The evaluation outputs a csv file which is analysed in python. The python code snippets are [here available](https://github.com/advanced-software-engineering/Evaluation_Python/).
+
+All repositories are under the Apache License 2.0.
 
 Our project is implemented in Java and we used git to coordinate the team development.
 
 The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 68 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5. Especially the similarity calculation was tested extensively. We have line coverage of 75% (measured with the Intellij).
 
 We didn't use a continuous inspection tool such as sonarqube. However we used we Intellij internal analyse tool (under analyze -> inspect code) to improve the code quality.
+
+Our project setup was the following:
+
+![setup](https://user-images.githubusercontent.com/9574324/58258601-51e23100-7d73-11e9-9bf1-4a097d1a73f2.png)
 
 ## Installation
 
@@ -82,7 +88,7 @@ We are using the following information to calculate the similarity of two contex
     * fully qualified name of return type of the enclosing method
     * number of method parameters of the enclosing method
     * name and fully qualified name of the method parameters
-    * fully qualified name of super type
+    * fully qualified name of super type    
     
 __Per default the similarity calculation is done with equal weights, but a developer can optionally set the weights as constructor argument__
     
@@ -102,13 +108,21 @@ We used the Top-K accuracy to analyse the prediction quality. It checks if under
 
 ![baseline](https://user-images.githubusercontent.com/9574324/58184195-edf73400-7cb0-11e9-88f0-3bd4f6272364.png)
 
-TODO
+The average prediction time takes is approximately 100ms.
+
+However we can only predict a recommendation, if this receiver type was mined before. SO if a class or method was renamed a class was moved it is an issues for our approach.
 
 ### Similarity Weights Evaluation
 
+The run the recommender with different weights. The results are summarized in the following plot:
+
 ![weight_change](https://user-images.githubusercontent.com/9574324/58183880-63aed000-7cb0-11e9-9835-b607c5b2dec8.png)
 
-| Attribute     | Correlation value        | association |
+Additionally we did a point-biserial correlation analysis between the binary attribute (is the correct recommendation selected) and the similarity value of the attributes listed below (the similarity is a value between 0 and 1).
+
+The correlation coefficient are summarized in this table (the assiciation is determined on [this guideline](https://statistics.laerd.com/statistical-guides/pearson-correlation-coefficient-statistical-guide.php)):
+
+| Attribute     | Correlation coefficient        | association |
 | ------------- |:-------------:|:-------------:|
 | final object type      | 0.42 | positive medium association |
 | object origin      | 0.20      | positive small association |
@@ -117,6 +131,8 @@ TODO
 | enclosing method: number of parameters | 0.21      | positive small association |
 | enclosing method: parameter types and names | 0.08      | positive very small association |
 | enclosing method:super type | 0.12      | positive small association |
+
+Based on assocation we decided to change the weights as follows:
 
 | Attribute     | Weight        |
 | ------------- |:-------------:|
@@ -128,9 +144,13 @@ TODO
 | enclosing method: parameter types and names | 0.5      |
 | enclosing method:super type | 1.0      |
 
+We rerun the evaluation scripts and get the following results
+
 ![weighed_changed](https://user-images.githubusercontent.com/9574324/58184245-08311200-7cb1-11e9-9ee6-ec52d74c376f.png)
 
-TODO
+It is an improvement of +2% for the top 1 accuracy and +5% for the top 3 and top 5 accuracy.
+
+However we think that an enhancement of the similarity calculation would be the better approach to  improve the recommendations. For example we could use the sequence of surrounding expressions instead of only the last one.
 
 ## Models
 
