@@ -52,8 +52,11 @@ public class PersistenceManager implements IPersistenceManager {
             File directory = Paths.get(modelDirectory, resultType.toString()).toFile();
 
             if (directory.exists()) {
-                for (File fileEntry : directory.listFiles()) {
-                    ret.add(Pair.of(fileEntry.getName(), resultType));
+                File[] files = directory.listFiles();
+                if(files != null) {
+                    for (File fileEntry : files) {
+                        ret.add(Pair.of(fileEntry.getName(), resultType));
+                    }
                 }
             }
         }

@@ -51,7 +51,7 @@ class QuerySelectionTest {
         QuerySelection copy = qs.getCopy();
 
         Assertions.assertEquals(qs, copy);
-        Assertions.assertFalse(qs == copy);
+        Assertions.assertNotSame(qs, copy);
     }
 
     @Test

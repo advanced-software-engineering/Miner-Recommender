@@ -29,7 +29,6 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
         this.processor = processor;
         this.pm = pm;
         this.weights = weights;
-
     }
 
     @Override
@@ -55,7 +54,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
 
         ReceiverTypeQueries rtq = pm.load(query.getReceiverType(), query.getResultType());
         for (QuerySelection querySelection : rtq.getItems()) {
-            Similarity similarity = null;
+            Similarity similarity;
             if (weights == null) {
                 similarity = new Similarity(querySelection.getQuery(), query);
             } else {
@@ -104,7 +103,7 @@ public class MethodCallRecommender extends AbstractCallsRecommender<Query> {
         return lastModelSize;
     }
 
-    public void persist(QuerySelection querySelection){
+    public void persist(QuerySelection querySelection) {
         pm.saveModel(querySelection);
     }
 }

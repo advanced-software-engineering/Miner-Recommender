@@ -45,7 +45,7 @@ public class ContextProcessor {
         return ret;
     }
 
-    protected List<MethodInvocationContext> getMethodContext(ISST sst) {
+    private List<MethodInvocationContext> getMethodContext(ISST sst) {
         try {
             MethodInvocationContextVisitor visitor = new MethodInvocationContextVisitor();
             sst.accept(visitor, new MethodInvocationContext());

@@ -19,16 +19,15 @@ public class Miner {
     public static void main(String[] args) {
         if (args.length < 2) {
             logger.error("Not enough arguments provided! Syntax: contextDirectory modelDirectory");
-            System.exit(1);
+        } else {
+            String contextDirectory = args[0];
+            String modelDirectory = args[1];
+
+            logger.info("Context directory is: " + contextDirectory);
+            logger.info("Model directory is: " + modelDirectory);
+
+            readContextsFromDisk(contextDirectory, modelDirectory);
         }
-
-        String contextDirectory = args[0];
-        String modelDirectory = args[1];
-
-        logger.info("Context directory is: " + contextDirectory);
-        logger.info("Model directory is: " + modelDirectory);
-
-        readContextsFromDisk(contextDirectory, modelDirectory);
     }
 
 
