@@ -25,7 +25,7 @@ We didn't use a continuous inspection tool such as sonarqube. However we used we
 
 Our project setup was the following:
 
-![setup](https://user-images.githubusercontent.com/9574324/58258601-51e23100-7d73-11e9-9bf1-4a097d1a73f2.png)
+![Final](https://user-images.githubusercontent.com/9574324/58259552-147ea300-7d75-11e9-8195-e3780d7be4d1.png)
 
 ## Installation
 
