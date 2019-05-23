@@ -17,7 +17,9 @@ Both repositories are under the Apache License 2.0.
 
 Our project is implemented in Java and we used git to coordinate the team development.
 
-The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 62 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5. Especially the similarity calculation was tested extensively.
+The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 68 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5. Especially the similarity calculation was tested extensively. We have line coverage of 75% (measured with the Intellij).
+
+We didn't use a continuous inspection tool such as sonarqube. However we used we Intellij internal analyse tool (under analyze -> inspect code) to improve the code quality.
 
 ## Installation
 
