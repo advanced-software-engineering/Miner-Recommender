@@ -94,7 +94,7 @@ __Per default the similarity calculation is done with equal weights, but a devel
     
 ## Example
 
-Run the `Example.java` file in the `evaluation & example` repository. No command line arguments are needed. The same query is asked multiple times. After each request the model is manually updated and the prediction becomes more meaningful.
+Run the [`Example.java`](https://github.com/advanced-software-engineering/Evaluation-Examples/blob/master/src/main/java/ch/uzh/ifi/seal/ase19/examples/Example.java) file in the `evaluation & example` repository. No command line arguments are needed. The same query is asked multiple times. After each request the model is manually updated and the prediction becomes more meaningful.
 
 ## Evaluation 
 
