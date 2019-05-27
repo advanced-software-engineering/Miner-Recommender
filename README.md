@@ -21,7 +21,7 @@ Our project is implemented in Java and we used git to coordinate the team develo
 
 The recommender and miner project contains a test suite to verify the fundamental functionality. We have written 68 jUnit tests. To write short but powerful tests we used Mockito in combination with jUnit5. Especially the similarity calculation was tested extensively. We have line coverage of 75% (measured with the Intellij).
 
-We didn't use a continuous inspection tool such as sonarqube. However we used we Intellij internal analyse tool (under analyze -> inspect code) to improve the code quality.
+We didn't use a continuous inspection tool such as sonarqube. However we used Intellij internal analyse tool (under analyze -> inspect code) to improve the code quality.
 
 Our project setup was the following:
 
